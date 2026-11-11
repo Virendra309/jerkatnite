@@ -2,7 +2,6 @@
 
 import { createContext, useContext, useRef, useState, type ReactNode } from "react";
 import { locations, type Location, type PlatformId } from "@/data/site";
-import { TodayHours } from "./today-hours";
 
 type Mode = "pickup" | "delivery";
 
@@ -53,15 +52,14 @@ const platforms: Record<PlatformId, { name: string; tile: ReactNode }> = {
   },
 };
 
-function ModeToggle({ mode, onChange }: { mode: Mode; onChange: (m: Mode) => void }) {
+function ModeToggle({ mode, onChange, light }: { mode: Mode; onChange: (m: Mode) => void; light?: boolean }) {
   return (
     <div role="radiogroup" aria-label="Order type" className="relative grid shrink-0 grid-cols-2 rounded-full bg-white/20 p-1">
-      {/* green pill slides between the two options */}
       <span
         aria-hidden
-        className={`absolute inset-y-1 left-1 w-[calc(50%-4px)] rounded-full bg-[#5ee26f] shadow-md shadow-black/30 transition-transform duration-300 ease-out ${
-          mode === "delivery" ? "translate-x-full" : ""
-        }`}
+        className={`absolute inset-y-1 left-1 w-[calc(50%-4px)] rounded-full transition-[transform,background-color] duration-300 ease-out ${
+          light ? "bg-white" : "bg-[#5ee26f]"
+        } ${mode === "delivery" ? "translate-x-full" : ""}`}
       />
       {(["pickup", "delivery"] as const).map((m) => (
         <button
@@ -71,7 +69,7 @@ function ModeToggle({ mode, onChange }: { mode: Mode; onChange: (m: Mode) => voi
           aria-checked={mode === m}
           onClick={() => onChange(m)}
           className={`relative z-10 rounded-full px-5 py-2 text-sm font-medium capitalize transition-colors duration-300 sm:px-6 sm:text-base ${
-            mode === m ? "text-black" : "text-white hover:text-gold"
+            mode === m ? "text-black" : "text-white"
           }`}
         >
           {m}
@@ -81,41 +79,17 @@ function ModeToggle({ mode, onChange }: { mode: Mode; onChange: (m: Mode) => voi
   );
 }
 
-function Steps({ step }: { step: 1 | 2 }) {
-  return (
-    <p className="mb-1 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/60">
-      <span className={step === 1 ? "text-gold" : ""}>1 Location</span>
-      <span aria-hidden className="h-px w-6 bg-white/30" />
-      <span className={step === 2 ? "text-gold" : ""}>2 Order</span>
-    </p>
-  );
-}
-
-const LAST_LOCATION_KEY = "jan:last-location";
-
 /** Site-wide "Order Now" popup: choose pickup/delivery and a location, then an ordering platform. */
 export function OrderProvider({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDialogElement>(null);
   const [mode, setMode] = useState<Mode>("pickup");
   const [loc, setLoc] = useState<Location | null>(null);
 
-  const openLocations = locations.filter((l) => !l.comingSoon);
-  const [lastSlug, setLastSlug] = useState<string | null>(null);
+  // Same order as the live site: HQ last.
+  const openLocations = locations.filter((l) => !l.comingSoon && l.orderPopup !== false).sort((a, b) => Number(!!a.hq) - Number(!!b.hq));
   const open = () => {
     setLoc(null);
-    try {
-      setLastSlug(localStorage.getItem(LAST_LOCATION_KEY));
-    } catch {
-      // storage unavailable (private mode etc.) — just don't remember
-    }
     ref.current?.showModal();
-  };
-  const choose = (l: Location) => {
-    setLoc(l);
-    setLastSlug(l.slug);
-    try {
-      localStorage.setItem(LAST_LOCATION_KEY, l.slug);
-    } catch {}
   };
   const close = () => ref.current?.close();
   const links = loc ? loc.order[mode] : [];
@@ -140,53 +114,36 @@ export function OrderProvider({ children }: { children: ReactNode }) {
           </button>
 
           <div className="mb-6 flex flex-wrap items-center justify-between gap-4 pr-6 sm:pl-3">
-            <div>
-              <Steps step={loc ? 2 : 1} />
-              <h2 id="order-title" className="display text-4xl sm:text-5xl">
-                {loc ? "Order Online Now" : "Select Location"}
-              </h2>
-            </div>
-            <ModeToggle mode={mode} onChange={setMode} />
+            <h2 id="order-title" className="display text-4xl sm:text-5xl">
+              {loc ? "Order Online Now" : "Select Location"}
+            </h2>
+            <ModeToggle mode={mode} onChange={setMode} light={!!loc} />
           </div>
 
           {!loc ? (
-            <ul key="locations" className="animate-fade-up grid gap-3 sm:grid-cols-2">
+            <ul className="grid gap-3 sm:grid-cols-2">
               {openLocations.map((l) => (
                 <li key={l.slug}>
                   <button
                     type="button"
-                    onClick={() => choose(l)}
-                    className="group relative w-full rounded-xl border border-white/25 bg-gradient-to-b from-[#3a3a3a] to-[#111] px-4 py-4 text-center transition duration-300 hover:-translate-y-0.5 hover:border-leaf/70 hover:shadow-lg hover:shadow-leaf/10"
+                    onClick={() => setLoc(l)}
+                    className="display w-full rounded-xl border border-white/25 bg-gradient-to-b from-[#3a3a3a] to-[#111] px-4 py-5 text-2xl transition hover:-translate-y-0.5 hover:border-leaf/70 sm:text-3xl"
                   >
-                    {l.slug === lastSlug && (
-                      <span className="absolute right-2 top-2 rounded-full bg-gold/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-gold">
-                        Last used
-                      </span>
-                    )}
-                    <span className="display block text-2xl sm:text-3xl">
-                      {l.short.toUpperCase()}
-                      {l.hq && <span className="text-[#5ee26f]"> (HQ)</span>}
-                    </span>
-                    {l.address && <span className="mt-1 block truncate text-xs text-white/55">{l.address}</span>}
-                    <span className="mt-1 block">
-                      <TodayHours slug={l.slug} />
-                    </span>
+                    {l.short.toUpperCase()}
+                    {l.hq && <span className="text-[#5ee26f]"> (HQ)</span>}
                   </button>
                 </li>
               ))}
             </ul>
           ) : (
-            <div key={`${loc.slug}-${mode}`} className="animate-fade-up">
+            <>
               {links.length > 0 ? (
                 <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                   {links.map((o) => {
                     const p = platforms[o.platform];
                     return (
-                      <li
-                        key={o.platform}
-                        className="group flex flex-col items-center rounded-xl border border-white/25 bg-white/[0.04] px-3 pb-4 pt-4 text-center transition duration-300 hover:-translate-y-1 hover:border-leaf/60 hover:bg-white/[0.08]"
-                      >
-                        <span className="size-14 overflow-hidden rounded-xl shadow-lg shadow-black/40 transition-transform duration-300 group-hover:scale-110">{p.tile}</span>
+                      <li key={o.platform} className="flex flex-col items-center rounded-xl border border-white/25 bg-white/[0.04] px-3 pb-4 pt-4 text-center">
+                        <span className="size-14 overflow-hidden rounded-xl">{p.tile}</span>
                         <h3 className="display mt-3 whitespace-nowrap text-xl sm:text-2xl">{p.name}</h3>
                         <p className="text-sm text-white/70 underline underline-offset-2">{mode === "pickup" ? "Pickup Option" : "Delivery Service"}</p>
                         <a
@@ -204,10 +161,7 @@ export function OrderProvider({ children }: { children: ReactNode }) {
               ) : (
                 <p className="py-6 text-center text-white/75">No {mode} options at this location yet.</p>
               )}
-              <button type="button" onClick={() => setLoc(null)} className="mt-5 text-sm text-white/70 underline underline-offset-2 hover:text-gold">
-                ← Change location ({loc.short})
-              </button>
-            </div>
+            </>
           )}
         </div>
       </dialog>

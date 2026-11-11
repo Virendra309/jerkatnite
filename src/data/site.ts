@@ -53,6 +53,8 @@ export type Location = {
   /** Short name shown in the Order Now popup, e.g. "Baltimore". */
   short: string;
   hq?: boolean;
+  /** Set to false to hide this location from the Order Now popup (as on the live site). */
+  orderPopup?: boolean;
   /** Online ordering links per mode. Replace "#" with the real store URLs. */
   order: { pickup: OrderLink[]; delivery: OrderLink[] };
 };
@@ -100,6 +102,7 @@ export const locations: Location[] = [
     address: "12970 Westheimer Rd, Houston, TX 77007",
     mapsQuery: "12970 Westheimer Rd, Houston, TX",
     short: "Houston",
+    orderPopup: false,
     hours: ["4:00 PM – 10:00 PM", null, "5:30 PM – 10:30 PM", null, null, null, "5:00 PM – 1:00 AM"],
     order: { pickup: pickupAll.filter((o) => o.platform !== "toast"), delivery: deliveryAll },
   },
