@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { images, nav, type NavLink } from "@/data/site";
 import { OrderButton } from "./order";
 
@@ -23,8 +23,38 @@ function Chevron({ className = "" }: { className?: string }) {
 export function Header() {
   const [open, setOpen] = useState(false);
   const [dropdown, setDropdown] = useState<string | null>(null);
+  const [hovered, setHovered] = useState<number | null>(null);
   const pathname = usePathname();
   const navRef = useRef<HTMLElement>(null);
+  const itemRefs = useRef<(HTMLElement | null)[]>([]);
+  const pillRef = useRef<HTMLSpanElement>(null);
+
+  // The white pill sits on the hovered/open item, otherwise on the current page.
+  const activeIndex = nav.findIndex((item) => isActive(pathname, item));
+  const openIndex = nav.findIndex((item) => item.label === dropdown);
+  const target = hovered ?? (openIndex >= 0 ? openIndex : activeIndex);
+
+  // Move the pill by writing its position straight to the DOM (no re-render needed).
+  useLayoutEffect(() => {
+    const pill = pillRef.current;
+    if (!pill) return;
+    const place = (animate: boolean) => {
+      const el = itemRefs.current[target];
+      if (!el) {
+        pill.style.opacity = "0";
+        return;
+      }
+      pill.style.transitionProperty = animate ? "left, width, opacity" : "opacity";
+      pill.style.left = `${el.offsetLeft}px`;
+      pill.style.width = `${el.offsetWidth}px`;
+      pill.style.opacity = "1";
+    };
+    place(pill.dataset.ready === "1");
+    pill.dataset.ready = "1";
+    const onResize = () => place(false);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [target]);
 
   // Close an open dropdown on outside click or Escape.
   useEffect(() => {
@@ -54,15 +84,31 @@ export function Header() {
 
         {/* Desktop menu */}
         <nav ref={navRef} aria-label="Main" className="hidden lg:block">
-          <ul className="flex items-center gap-0.5 whitespace-nowrap rounded-full border border-white/10 bg-white/[0.06] p-1.5 text-[15px] font-medium shadow-lg shadow-black/30 backdrop-blur-md xl:gap-1 xl:text-[17px]">
-            {nav.map((item) => {
+          <ul
+            onMouseLeave={() => setHovered(null)}
+            onBlur={(e) => !e.currentTarget.contains(e.relatedTarget) && setHovered(null)}
+            className="relative flex items-center gap-0.5 whitespace-nowrap rounded-full border border-white/10 bg-white/[0.06] p-1.5 text-[15px] font-medium shadow-lg shadow-black/30 backdrop-blur-md xl:gap-1 xl:text-[17px]"
+          >
+            <span
+              ref={pillRef}
+              aria-hidden
+              className="pointer-events-none absolute inset-y-1.5 rounded-full bg-white opacity-0 shadow-md duration-300 ease-out"
+            />
+            {nav.map((item, i) => {
               const active = isActive(pathname, item);
-              const pill = active ? "bg-white text-black" : "text-white hover:bg-white/10";
+              const pill = `relative z-10 rounded-full transition-colors duration-300 ${i === target ? "text-black" : "text-white"}`;
+              const track = {
+                ref: (el: HTMLElement | null) => {
+                  itemRefs.current[i] = el;
+                },
+                onMouseEnter: () => setHovered(i),
+                onFocus: () => setHovered(i),
+              };
 
               if (!item.children) {
                 return (
-                  <li key={item.href}>
-                    <Link href={item.href} aria-current={active ? "page" : undefined} className={`block rounded-full px-3.5 py-2.5 transition-colors xl:px-5 ${pill}`}>
+                  <li key={item.href} {...track}>
+                    <Link href={item.href} aria-current={active ? "page" : undefined} className={`block px-3.5 py-2.5 xl:px-5 ${pill}`}>
                       {item.label}
                     </Link>
                   </li>
@@ -71,8 +117,8 @@ export function Header() {
 
               const expanded = dropdown === item.label;
               return (
-                <li key={item.href} className="group relative">
-                  <div className={`flex items-center rounded-full transition-colors ${pill}`}>
+                <li key={item.href} className="group relative" {...track}>
+                  <div className={`flex items-center ${pill}`}>
                     <Link href={item.href} aria-current={pathname === item.href ? "page" : undefined} onClick={closeAll} className="py-2.5 pl-3.5 pr-1.5 xl:pl-5">
                       {item.label}
                     </Link>
@@ -91,7 +137,7 @@ export function Header() {
                   {/* pt-3 bridges the gap so hover isn't lost moving into the panel */}
                   <div
                     id={`menu-${item.label}`}
-                    className={`absolute left-1/2 top-full w-64 -translate-x-1/2 pt-3 ${
+                    className={`absolute left-1/2 top-full z-20 w-64 -translate-x-1/2 pt-3 ${
                       expanded ? "block" : "hidden group-hover:block"
                     }`}
                   >
