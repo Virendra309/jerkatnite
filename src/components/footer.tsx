@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { images, locations, nav, site, socials } from "@/data/site";
+import { images, locations, pageLinks, site, socials } from "@/data/site";
 
 export function Footer() {
   return (
@@ -20,7 +20,7 @@ export function Footer() {
           </ul>
         </div>
 
-        <FooterList title="Quick Links" items={nav.map((n) => ({ label: n.label, href: n.href }))} />
+        <FooterList title="Quick Links" items={pageLinks} />
         <FooterList title="Socials" items={socials.map((s) => ({ label: s.label, href: s.href, external: true }))} />
         <FooterList title="Locations" items={locations.map((l) => ({ label: l.city, href: `/locations/${l.slug}` }))} />
       </div>

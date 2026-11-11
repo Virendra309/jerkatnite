@@ -14,15 +14,6 @@ export const site = {
   heroVideo: "https://player.vimeo.com/video/1193550185?muted=1&autoplay=1&dnt=1&loop=1&background=1",
 };
 
-export const nav = [
-  { label: "Home", href: "/" },
-  { label: "Locations", href: "/locations" },
-  { label: "Catering", href: "/catering" },
-  { label: "Private Events", href: "/private-events" },
-  { label: "Menu", href: "/menu" },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
-];
 
 export const socials = [
   { label: "Instagram", href: "https://www.instagram.com/jerkatnite/", followers: "502k" },
@@ -160,4 +151,33 @@ export const faqs = [
     q: "How do I make a reservation?",
     a: "Reservations are available at the Baltimore (HQ) location through OpenTable. Walk-ins are welcome everywhere else.",
   },
+];
+
+export type NavLink = { label: string; href: string; children?: { label: string; href: string }[] };
+
+export const nav: NavLink[] = [
+  { label: "Home", href: "/" },
+  {
+    label: "Locations",
+    href: "/locations",
+    children: locations.map((l) => ({ label: l.city, href: `/locations/${l.slug}` })),
+  },
+  { label: "Catering", href: "/catering" },
+  { label: "Private Events", href: "/private-events" },
+  { label: "Menu", href: "/menu" },
+  {
+    label: "About",
+    href: "/about",
+    children: [
+      { label: "About Us", href: "/about" },
+      { label: "Contact Us", href: "/contact" },
+    ],
+  },
+];
+
+/** Every page link in the menu, flattened and de-duplicated (for the footer and sitemap). */
+export const pageLinks = [
+  ...new Map(
+    nav.flatMap((n) => [n, ...(n.children ?? [])]).filter((l) => !l.href.startsWith("/locations/")).map((l) => [l.href, l]),
+  ).values(),
 ];
