@@ -23,16 +23,8 @@ function Chevron({ className = "" }: { className?: string }) {
 export function Header() {
   const [open, setOpen] = useState(false);
   const [dropdown, setDropdown] = useState<string | null>(null);
-  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const navRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   // Close an open dropdown on outside click or Escape.
   useEffect(() => {
@@ -53,11 +45,8 @@ export function Header() {
   };
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-40 transition-colors ${
-        scrolled || open ? "bg-black/85 backdrop-blur-md" : "bg-transparent"
-      }`}
-    >
+    // Same look at every scroll position (no scroll-triggered changes): blurred dark bar, menu in a glass capsule.
+    <header className={`fixed inset-x-0 top-0 z-40 border-b border-white/5 backdrop-blur-md ${open ? "bg-black/90" : "bg-black/55"}`}>
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-6 px-4 sm:px-6">
         <Link href="/" aria-label="Jerk at Nite home" className="shrink-0">
           <Image src={images.logo} alt="Jerk at Nite" width={174} height={30} priority />
@@ -65,7 +54,7 @@ export function Header() {
 
         {/* Desktop menu */}
         <nav ref={navRef} aria-label="Main" className="hidden lg:block">
-          <ul className="flex items-center gap-0.5 whitespace-nowrap text-[15px] font-medium xl:gap-1 xl:text-[17px]">
+          <ul className="flex items-center gap-0.5 whitespace-nowrap rounded-full border border-white/10 bg-white/[0.06] p-1.5 text-[15px] font-medium shadow-lg shadow-black/30 backdrop-blur-md xl:gap-1 xl:text-[17px]">
             {nav.map((item) => {
               const active = isActive(pathname, item);
               const pill = active ? "bg-white text-black" : "text-white hover:bg-white/10";
