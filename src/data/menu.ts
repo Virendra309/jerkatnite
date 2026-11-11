@@ -1,33 +1,69 @@
-// Menu content. Prices are placeholders — replace them with the real menu.
+// Menu content, grouped into the tabs shown on the Menu page.
+//
+// "Lunch Time" items and descriptions are taken from the live jerkatnite.com menu.
+// Descriptions ending in "…" were cut off in the reference — paste in the full text.
+// The other tabs are placeholders: replace them with the real dishes and photos.
 
-export type MenuItem = { name: string; description: string; price?: string; tags?: string[] };
-export type MenuSection = { title: string; items: MenuItem[] };
+import { images } from "./site";
 
-export const menu: MenuSection[] = [
+export type MenuItem = { name: string; description: string; image: string };
+export type MenuTab = { title: string; items: MenuItem[] };
+
+export const menu: MenuTab[] = [
   {
-    title: "Signature Plates",
+    title: "Lunch Time",
     items: [
-      { name: "Jerk Chicken", description: "Our signature smoky jerk chicken, served with rice & peas and cabbage.", tags: ["Signature"] },
-      { name: "Oxtail", description: "Slow-braised, fall-off-the-bone oxtail in rich brown gravy.", tags: ["Fan favorite"] },
-      { name: "Jammin' Salmon", description: "Seared salmon glazed with island spices." },
-      { name: "Curry Chicken", description: "Tender chicken simmered in Jamaican curry." },
+      {
+        name: "Jerk Tacos",
+        description: "2 big soft tacos filled with your choice of shredded meat, sautéed onions, peppers, and melted cheese.",
+        image: images.tacos,
+      },
+      {
+        name: "Kingston Kurry",
+        description: "Slow cooked in rich flavorful curry sauce, with an array of herbs and spices. Chicken & Goat Options",
+        image: images.catering1,
+      },
+      {
+        name: "Alfredo Rasta Pasta",
+        description:
+          "Penne pasta tossed in extra virgin olive oil, housemade jerk Parmesan Alfredo sauce, fresh mozzarella, sautéed onions, and…",
+        image: images.catering,
+      },
+      {
+        name: "Slowly Braised Nanny Oxtails",
+        description: "Tender oxtails braised low and slow in rich brown gravy with peppers, onions, garlic, thyme, scotch bonnet, and…",
+        image: images.catering3,
+      },
+      {
+        name: "Jerk Mac & Cheese",
+        description: "Smoked Jerk Chicken, Seasoned Mac and Cheese, served with a slice of Soft Rasta Bread",
+        image: images.catering1,
+      },
+      {
+        name: "Jammin Salmon",
+        description: "Jerk-Teriyaki sauteed 6 oz. Salmon Fillet served with Organic Scallions and Peppers. Comes with two side options…",
+        image: images.catering,
+      },
     ],
   },
   {
-    title: "Fusion",
+    title: "Entrees",
     items: [
-      { name: "Rasta Pasta", description: "Creamy, spicy pasta with peppers and your choice of jerk protein." },
-      { name: "Jerk Tacos", description: "Jerk chicken tacos with slaw and house sauce." },
-      { name: "Jerk Wings", description: "Crispy wings tossed in jerk seasoning.", tags: ["Spicy"] },
+      { name: "Jerk Chicken", description: "Our signature smoky jerk chicken with rice & peas and cabbage.", image: images.catering1 },
+      { name: "Curry Goat", description: "Tender goat slow-simmered in Jamaican curry.", image: images.catering },
+      { name: "Rack of Lamb", description: "Jerk-seasoned lamb, grilled and served with two sides.", image: images.catering3 },
     ],
   },
   {
-    title: "Sides",
+    title: "Little Tings",
     items: [
-      { name: "Rice & Peas", description: "Coconut rice cooked with kidney beans and thyme." },
-      { name: "Sweet Plantains", description: "Caramelized ripe plantains." },
-      { name: "Mac & Cheese", description: "Baked, golden and cheesy." },
-      { name: "Festival", description: "Sweet fried Jamaican dumplings." },
+      { name: "Jerk Wings", description: "Crispy wings tossed in jerk seasoning.", image: images.wings },
+      { name: "Sweet Plantains", description: "Caramelized ripe plantains.", image: images.catering2 },
+      { name: "Festival", description: "Sweet fried Jamaican dumplings.", image: images.catering1 },
     ],
+  },
+  {
+    title: "Desserts",
+    items: [{ name: "Rum Cake", description: "Moist Caribbean rum cake.", image: images.catering3 }],
   },
 ];

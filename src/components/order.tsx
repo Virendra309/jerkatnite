@@ -1,14 +1,91 @@
 "use client";
 
-import { createContext, useContext, useRef, type ReactNode } from "react";
-import { locations } from "@/data/site";
+import { createContext, useContext, useRef, useState, type ReactNode } from "react";
+import { locations, type Location, type PlatformId } from "@/data/site";
+
+type Mode = "pickup" | "delivery";
 
 const OrderContext = createContext<() => void>(() => {});
 
-/** Provides a site-wide "Order Now" dialog listing each location's ordering links. */
+/** Brand tiles for each ordering platform (simple stand-ins; swap for official logo files if you have them). */
+const platforms: Record<PlatformId, { name: string; tile: ReactNode }> = {
+  doordash: {
+    name: "DoorDash",
+    tile: (
+      <span className="grid size-full place-items-center bg-[#FF3008] text-[9px] font-black tracking-tight text-white">DOORDASH</span>
+    ),
+  },
+  ubereats: {
+    name: "Uber Eats",
+    tile: (
+      <span className="grid size-full place-items-center bg-black text-center text-[15px] font-semibold leading-[1.05] text-white">
+        <span>
+          Uber
+          <br />
+          <span className="text-[#06C167]">Eats</span>
+        </span>
+      </span>
+    ),
+  },
+  toast: {
+    name: "Toast",
+    tile: (
+      <span className="grid size-full place-items-center bg-[#FF4C00]">
+        <svg viewBox="0 0 24 24" className="size-8" fill="none" stroke="white" strokeWidth="2.2" strokeLinejoin="round" aria-hidden>
+          <path d="M6 20V11a4 4 0 0 1-1-7h14a4 4 0 0 1-1 7v9z" />
+        </svg>
+      </span>
+    ),
+  },
+  direct: {
+    name: "Direct Pickup",
+    tile: (
+      <span className="grid size-full place-items-center bg-[#FFE500]">
+        <svg viewBox="0 0 24 24" className="size-8" aria-hidden>
+          <path
+            fill="#111"
+            d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"
+          />
+        </svg>
+      </span>
+    ),
+  },
+};
+
+function ModeToggle({ mode, onChange }: { mode: Mode; onChange: (m: Mode) => void }) {
+  return (
+    <div role="radiogroup" aria-label="Order type" className="flex shrink-0 rounded-full bg-white/20 p-1">
+      {(["pickup", "delivery"] as const).map((m) => (
+        <button
+          key={m}
+          type="button"
+          role="radio"
+          aria-checked={mode === m}
+          onClick={() => onChange(m)}
+          className={`rounded-full px-5 py-2 text-sm font-medium capitalize transition-colors sm:px-6 sm:text-base ${
+            mode === m ? "bg-[#5ee26f] text-black" : "text-white hover:bg-white/10"
+          }`}
+        >
+          {m}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/** Site-wide "Order Now" popup: choose pickup/delivery and a location, then an ordering platform. */
 export function OrderProvider({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDialogElement>(null);
-  const open = () => ref.current?.showModal();
+  const [mode, setMode] = useState<Mode>("pickup");
+  const [loc, setLoc] = useState<Location | null>(null);
+
+  const openLocations = locations.filter((l) => !l.comingSoon);
+  const open = () => {
+    setLoc(null);
+    ref.current?.showModal();
+  };
+  const close = () => ref.current?.close();
+  const links = loc ? loc.order[mode] : [];
 
   return (
     <OrderContext.Provider value={open}>
@@ -16,48 +93,72 @@ export function OrderProvider({ children }: { children: ReactNode }) {
       <dialog
         ref={ref}
         aria-labelledby="order-title"
-        onClick={(e) => e.target === ref.current && ref.current?.close()}
-        className="m-auto w-[min(92vw,640px)] rounded-2xl border border-white/10 bg-ink-2 p-0 text-white backdrop:bg-black/70 backdrop:backdrop-blur-sm"
+        onClick={(e) => e.target === ref.current && close()}
+        className="m-auto w-[min(94vw,680px)] overflow-visible bg-transparent p-0 text-white backdrop:bg-black/75"
       >
-        <div className="p-6 sm:p-8">
-          <div className="flex items-start justify-between gap-4">
-            <h2 id="order-title" className="display text-4xl">
-              Order <span className="text-gradient">Now</span>
+        <div className="relative rounded-2xl border border-white/10 bg-gradient-to-b from-[#6e6e6e] via-[#3a3a3a] to-[#161616] p-4 shadow-2xl shadow-black/60 sm:p-6">
+          <button
+            type="button"
+            onClick={close}
+            aria-label="Close"
+            className="absolute right-3 top-3 grid size-6 place-items-center rounded border border-white/40 text-sm leading-none text-white/80 hover:bg-white/10 hover:text-white"
+          >
+            ×
+          </button>
+
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-4 pr-6 sm:pl-3">
+            <h2 id="order-title" className="display text-4xl sm:text-5xl">
+              {loc ? "Order Online Now" : "Select Location"}
             </h2>
-            <button
-              onClick={() => ref.current?.close()}
-              aria-label="Close"
-              className="rounded-full p-2 text-2xl leading-none text-white/70 hover:bg-white/10 hover:text-white"
-            >
-              ×
-            </button>
+            <ModeToggle mode={mode} onChange={setMode} />
           </div>
-          <p className="mt-2 text-white/70">Pick your nearest location for pickup or delivery.</p>
-          <ul className="mt-6 grid gap-4">
-            {locations.map((loc) => (
-              <li key={loc.slug} className="rounded-xl border border-white/10 bg-ink-3/60 p-4">
-                <div className="flex items-center justify-between gap-2">
-                  <h3 className="display text-2xl">{loc.city}</h3>
-                  {loc.comingSoon && <span className="rounded-full bg-gold/15 px-3 py-1 text-xs font-semibold text-gold">Coming soon</span>}
-                </div>
-                {loc.order.length > 0 && (
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {loc.order.map((o) => (
-                      <a
-                        key={o.label}
-                        href={o.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="rounded-full border border-leaf/50 px-4 py-2 text-sm font-semibold hover:bg-leaf hover:text-ink"
-                      >
-                        {o.label}
-                      </a>
-                    ))}
-                  </div>
-                )}
-              </li>
-            ))}
-          </ul>
+
+          {!loc ? (
+            <ul className="grid gap-3 sm:grid-cols-2">
+              {openLocations.map((l) => (
+                <li key={l.slug}>
+                  <button
+                    type="button"
+                    onClick={() => setLoc(l)}
+                    className="display w-full rounded-xl border border-white/25 bg-gradient-to-b from-[#3a3a3a] to-[#111] px-4 py-5 text-2xl transition hover:-translate-y-0.5 hover:border-leaf/70 sm:text-3xl"
+                  >
+                    {l.short.toUpperCase()}
+                    {l.hq && <span className="text-[#5ee26f]"> (HQ)</span>}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <>
+              {links.length > 0 ? (
+                <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  {links.map((o) => {
+                    const p = platforms[o.platform];
+                    return (
+                      <li key={o.platform} className="flex flex-col items-center rounded-xl border border-white/25 bg-white/[0.04] px-3 pb-4 pt-4 text-center">
+                        <span className="size-14 overflow-hidden rounded-xl">{p.tile}</span>
+                        <h3 className="display mt-3 whitespace-nowrap text-xl sm:text-2xl">{p.name}</h3>
+                        <p className="text-sm text-white/70 underline underline-offset-2">{mode === "pickup" ? "Pickup Option" : "Delivery Service"}</p>
+                        <a
+                          href={o.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-3 inline-flex w-full items-center justify-center rounded-[4px] bg-gradient-brand px-3 py-2.5 font-semibold text-ink transition hover:brightness-110"
+                        >
+                          Order Now
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : (
+                <p className="py-6 text-center text-white/75">No {mode} options at this location yet.</p>
+              )}
+              <button type="button" onClick={() => setLoc(null)} className="mt-5 text-sm text-white/70 underline underline-offset-2 hover:text-gold">
+                ← Change location ({loc.short})
+              </button>
+            </>
+          )}
         </div>
       </dialog>
     </OrderContext.Provider>

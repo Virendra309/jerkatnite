@@ -50,9 +50,26 @@ export type Location = {
   comingSoon?: boolean;
   reservations?: boolean;
   hours: WeekHours | null;
-  /** Online ordering links. Fill in the real store URLs. */
-  order: { label: string; href: string }[];
+  /** Short name shown in the Order Now popup, e.g. "Baltimore". */
+  short: string;
+  hq?: boolean;
+  /** Online ordering links per mode. Replace "#" with the real store URLs. */
+  order: { pickup: OrderLink[]; delivery: OrderLink[] };
 };
+
+export type PlatformId = "doordash" | "ubereats" | "toast" | "direct";
+export type OrderLink = { platform: PlatformId; href: string };
+
+const pickupAll: OrderLink[] = [
+  { platform: "doordash", href: "#" },
+  { platform: "ubereats", href: "#" },
+  { platform: "toast", href: "#" },
+  { platform: "direct", href: "#" },
+];
+const deliveryAll: OrderLink[] = [
+  { platform: "doordash", href: "#" },
+  { platform: "ubereats", href: "#" },
+];
 
 export const locations: Location[] = [
   {
@@ -60,23 +77,21 @@ export const locations: Location[] = [
     city: "Baltimore, MD",
     address: "21 N Eutaw St, Baltimore, MD 21201",
     mapsQuery: "21 N Eutaw St, Baltimore, MD 21201",
+    short: "Baltimore",
+    hq: true,
     reservations: true,
     hours: ["3:00 PM – 10:00 PM", null, null, "4:00 PM – 10:00 PM", "4:00 PM – 10:00 PM", null, "5:00 PM – 1:00 AM"],
-    order: [
-      { label: "DoorDash", href: "#" },
-      { label: "Uber Eats", href: "#" },
-      { label: "Grubhub", href: "#" },
-      { label: "Toast (Pickup)", href: "#" },
-    ],
+    order: { pickup: pickupAll, delivery: deliveryAll },
   },
   {
     slug: "washington-dc",
     city: "Washington, DC",
     address: null,
     mapsQuery: "Washington, DC",
+    short: "Washington DC",
     comingSoon: true,
     hours: null,
-    order: [],
+    order: { pickup: [], delivery: [] },
   },
   {
     slug: "houston-tx",
@@ -84,22 +99,18 @@ export const locations: Location[] = [
     // Copied from the current site; double-check the ZIP (77007 vs 77077).
     address: "12970 Westheimer Rd, Houston, TX 77007",
     mapsQuery: "12970 Westheimer Rd, Houston, TX",
+    short: "Houston",
     hours: ["4:00 PM – 10:00 PM", null, "5:30 PM – 10:30 PM", null, null, null, "5:00 PM – 1:00 AM"],
-    order: [
-      { label: "DoorDash", href: "#" },
-      { label: "Uber Eats", href: "#" },
-    ],
+    order: { pickup: pickupAll.filter((o) => o.platform !== "toast"), delivery: deliveryAll },
   },
   {
     slug: "detroit-mi",
     city: "Detroit, MI",
     address: "19163 Livernois Ave, Detroit, MI 48221",
     mapsQuery: "19163 Livernois Ave, Detroit, MI 48221",
+    short: "Detroit",
     hours: ["12:00 PM – 6:00 PM", null, "12:00 PM – 9:00 PM", "12:00 PM – 9:00 PM", "12:00 PM – 9:00 PM", "12:00 PM – 11:00 PM", "12:00 PM – 11:00 PM"],
-    order: [
-      { label: "DoorDash", href: "#" },
-      { label: "Uber Eats", href: "#" },
-    ],
+    order: { pickup: pickupAll.filter((o) => o.platform !== "toast"), delivery: deliveryAll },
   },
 ];
 

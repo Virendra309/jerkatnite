@@ -1,43 +1,58 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import { MenuTabs } from "@/components/menu-tabs";
 import { OrderButton } from "@/components/order";
-import { Container, PageHero } from "@/components/ui";
+import { Container, Faq } from "@/components/ui";
 import { menu } from "@/data/menu";
+import { images } from "@/data/site";
 
 export const metadata: Metadata = {
   title: "Menu",
-  description: "Jerk chicken, oxtail, rasta pasta, jerk tacos, wings and more. 100% Halal, no MSG, made fresh daily.",
+  description: "Jerk tacos, Kingston kurry, rasta pasta, oxtails, jammin salmon and more. 100% Halal, no MSG, made fresh daily.",
 };
 
 export default function MenuPage() {
   return (
     <>
-      <PageHero eyebrow="All Halal · No MSG" top="Our" accent="Food Menu">
-        Bold Jamaican flavors with a fusion twist, made fresh every day.
-      </PageHero>
-      <Container className="grid gap-16 pb-24">
-        {menu.map((section) => (
-          <section key={section.title} aria-labelledby={section.title}>
-            <h2 id={section.title} className="display border-b border-white/10 pb-3 text-4xl text-gradient">{section.title}</h2>
-            <ul className="mt-6 grid gap-x-10 gap-y-6 md:grid-cols-2">
-              {section.items.map((item) => (
-                <li key={item.name} className="flex justify-between gap-6">
-                  <div>
-                    <h3 className="text-lg font-bold">
-                      {item.name}
-                      {item.tags?.map((t) => (
-                        <span key={t} className="ml-2 rounded-full bg-leaf/15 px-2 py-0.5 align-middle text-xs font-semibold text-leaf">{t}</span>
-                      ))}
-                    </h3>
-                    <p className="mt-1 text-white/65">{item.description}</p>
-                  </div>
-                  {item.price && <span className="shrink-0 font-bold text-gold">{item.price}</span>}
-                </li>
-              ))}
-            </ul>
-          </section>
-        ))}
-        <div className="text-center"><OrderButton /></div>
-      </Container>
+      {/* Hero */}
+      <section className="relative isolate flex min-h-[78vh] items-center justify-center overflow-hidden pb-16 pt-32 text-center">
+        <Image src={images.catering1} alt="" fill priority sizes="100vw" className="-z-20 object-cover" />
+        <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-b from-black/50 via-black/45 to-black" />
+        <Container className="animate-rise">
+          <nav aria-label="Breadcrumb" className="mx-auto inline-flex items-center gap-3 rounded-full bg-black/50 px-6 py-2 backdrop-blur-sm">
+            <Link href="/" className="text-white hover:text-gold">Home</Link>
+            <span aria-hidden className="text-white">›</span>
+            <span aria-current="page" className="text-gold">Our Menu</span>
+          </nav>
+          <h1 className="display mt-5 text-5xl sm:text-7xl">Jerk at Nite&apos;s Menu</h1>
+          <p className="mx-auto mt-4 max-w-3xl text-lg text-white/90">
+            A menu crafted to leave a lasting impression. Packed with bold flavors, signature Jamaican jerk specialties, and rich
+            Caribbean spices. Every dish is made to be memorable, satisfying, and worth coming back for.
+          </p>
+          <OrderButton className="mt-8 rounded-[4px] px-5 py-2.5 font-semibold shadow-none">Order Online Now</OrderButton>
+        </Container>
+      </section>
+
+      {/* Menu */}
+      <section className="bg-black py-16">
+        <Container>
+          <h2 className="display mb-6 text-4xl sm:text-5xl">Explore Our Jamaican Caribbean Menu</h2>
+          <MenuTabs tabs={menu} />
+          <div className="mt-12 text-center">
+            <OrderButton className="rounded-[4px] px-5 py-2.5 font-semibold shadow-none">Order Online Now</OrderButton>
+          </div>
+        </Container>
+      </section>
+
+      {/* FAQ */}
+      <section className="bg-gradient-to-b from-[#1d5a26] to-ink py-20">
+        <Container>
+          <h2 className="display text-5xl">Frequently Asked Questions</h2>
+          <p className="mb-8 mt-2 text-white/80">Join us for authentic Jamaican flavors and an atmosphere you won&apos;t forget.</p>
+          <Faq />
+        </Container>
+      </section>
     </>
   );
 }
