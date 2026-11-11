@@ -139,7 +139,7 @@ export function Header() {
                     id={`menu-${item.label}`}
                     className={`absolute left-1/2 top-full z-20 w-60 -translate-x-1/2 pt-4 ${expanded ? "block" : "hidden group-hover:block"}`}
                   >
-                    <ul className="overflow-hidden rounded-lg border border-white/15 bg-gradient-to-b from-[#6b6b6b]/85 to-[#2b2b2b]/85 shadow-2xl shadow-black/40 backdrop-blur-xl">
+                    <ul className="overflow-hidden rounded-lg border border-white/15 bg-gradient-to-br from-[#a3a3a3]/85 via-[#5c5c5c]/85 to-[#262626]/90 shadow-2xl shadow-black/40 backdrop-blur-xl">
                       {item.children.map((child) => (
                         <li key={child.href} className="border-b border-white/15 last:border-b-0">
                           <Link
@@ -162,7 +162,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <OrderButton className="hidden whitespace-nowrap rounded-md px-5 py-2.5 sm:inline-flex" />
+          <OrderButton className="hidden whitespace-nowrap rounded-[4px] px-5 py-2.5 font-semibold shadow-none hover:shadow-none sm:inline-flex" />
           <button
             className="rounded-lg p-2 lg:hidden"
             aria-label={open ? "Close menu" : "Open menu"}

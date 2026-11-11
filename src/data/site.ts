@@ -170,6 +170,8 @@ export const nav: NavLink[] = [
     href: "/about",
     children: [
       { label: "About Us", href: "/about" },
+      { label: "Careers", href: "/careers" },
+      { label: "Gallery", href: "/gallery" },
       { label: "Contact Us", href: "/contact" },
     ],
   },
