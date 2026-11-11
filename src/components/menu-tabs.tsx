@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import type { MenuItem, MenuTab } from "@/data/menu";
 import { OrderButton } from "./order";
 
@@ -67,8 +67,6 @@ function MenuCard({ item, index, category }: { item: MenuItem; index: number; ca
 export function MenuTabs({ tabs }: { tabs: MenuTab[] }) {
   const [active, setActive] = useState(0);
   const [query, setQuery] = useState("");
-  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const pillRef = useRef<HTMLSpanElement>(null);
 
   const q = query.trim().toLowerCase();
   const results = useMemo(
@@ -81,40 +79,20 @@ export function MenuTabs({ tabs }: { tabs: MenuTab[] }) {
     [q, tabs],
   );
 
-  // Slide the yellow pill under the selected tab (written straight to the DOM; no re-render needed).
-  useLayoutEffect(() => {
-    const pill = pillRef.current;
-    const place = (animate: boolean) => {
-      const el = tabRefs.current[active];
-      if (!pill || !el) return;
-      pill.style.transitionProperty = animate ? "left, width" : "none";
-      pill.style.left = `${el.offsetLeft}px`;
-      pill.style.width = `${el.offsetWidth}px`;
-      pill.style.opacity = "1";
-    };
-    place(pill?.dataset.ready === "1");
-    if (pill) pill.dataset.ready = "1";
-    const onResize = () => place(false);
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, [active]);
-
   return (
     <div>
-      {/* Sticky control bar: tabs + search */}
-      <div className="sticky top-20 z-30 -mx-4 flex flex-wrap items-center justify-between gap-3 bg-black/80 px-4 py-3 backdrop-blur-md sm:-mx-6 sm:px-6">
-        <div
-          role="tablist"
-          aria-label="Menu categories"
-          className={`relative flex max-w-full gap-1 overflow-x-auto rounded-full bg-[#1d5a26] p-1.5 transition-opacity ${q ? "opacity-40" : ""}`}
-        >
-          <span ref={pillRef} aria-hidden className="pointer-events-none absolute inset-y-1.5 rounded-full bg-[#ffe500] opacity-0 duration-300 ease-out" />
+      {/* Control bar: tabs + search (static, does not stick or slide) */}
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        {/* gradient border: gold → green */}
+        <div className={`max-w-full rounded-full bg-gradient-to-r from-gold via-[#1d4a22] to-leaf p-px transition-opacity ${q ? "opacity-40" : ""}`}>
+          <div
+            role="tablist"
+            aria-label="Menu categories"
+            className="flex max-w-full overflow-x-auto rounded-full bg-gradient-to-r from-black via-[#0b2310] to-[#1d4f26] p-1.5"
+          >
           {tabs.map((t, i) => (
             <button
               key={t.title}
-              ref={(el) => {
-                tabRefs.current[i] = el;
-              }}
               id={`tab-${i}`}
               role="tab"
               type="button"
@@ -124,14 +102,14 @@ export function MenuTabs({ tabs }: { tabs: MenuTab[] }) {
                 setActive(i);
                 setQuery("");
               }}
-              className={`relative z-10 flex shrink-0 items-center gap-2 rounded-full px-5 py-2 font-medium transition-colors duration-300 sm:px-6 ${
-                active === i ? "text-black" : "text-white hover:text-gold"
+              className={`shrink-0 rounded-full px-6 py-3 text-base font-semibold transition-colors duration-200 sm:min-w-[180px] sm:px-8 sm:text-lg ${
+                active === i ? "bg-[#FFD700] text-black" : "text-white hover:text-gold"
               }`}
             >
               {t.title}
-              <span className={`rounded-full px-1.5 text-xs ${active === i ? "bg-black/15" : "bg-white/10"}`}>{t.items.length}</span>
             </button>
           ))}
+          </div>
         </div>
 
         <label className="relative w-full sm:w-72">
