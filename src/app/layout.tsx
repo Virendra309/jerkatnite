@@ -41,7 +41,8 @@ const restaurantJsonLd = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${manrope.variable} ${anton.variable} antialiased`}>
-      <body className="flex min-h-screen flex-col font-sans">
+      {/* suppressHydrationWarning: browser extensions (e.g. ColorZilla's cz-shortcut-listen) add attributes to <body> before React loads. */}
+      <body className="flex min-h-screen flex-col font-sans" suppressHydrationWarning>
         <a href="#main" className="sr-only z-50 rounded bg-gold px-4 py-2 text-ink focus:not-sr-only focus:fixed focus:left-4 focus:top-4">
           Skip to content
         </a>
