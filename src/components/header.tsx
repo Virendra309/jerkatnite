@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { images, nav, type NavLink } from "@/data/site";
 import { OrderButton } from "./order";
 
@@ -14,8 +14,25 @@ function isActive(pathname: string, item: NavLink) {
 
 function Chevron({ className = "" }: { className?: string }) {
   return (
-    <svg aria-hidden viewBox="0 0 448 512" className={`size-3.5 fill-current transition-transform ${className}`}>
+    <svg aria-hidden viewBox="0 0 448 512" className={`size-3.5 fill-current transition-transform duration-300 ${className}`}>
       <path d="M207 381.5 12.7 187.1c-9.4-9.4-9.4-24.6 0-33.9l22.7-22.7c9.4-9.4 24.5-9.4 33.9 0L224 284.5l154.7-154c9.4-9.3 24.5-9.3 33.9 0l22.7 22.7c9.4 9.4 9.4 24.6 0 33.9L241 381.5c-9.4 9.4-24.6 9.4-34 0z" />
+    </svg>
+  );
+}
+
+/** Gradient (gold → green) diagonal arrow used in the dropdowns. */
+function ArrowUpRight() {
+  // Unique per instance: a shared gradient id breaks when the panel that defines it is hidden.
+  const id = useId();
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" fill="none" className="size-5 shrink-0">
+      <defs>
+        <linearGradient id={id} x1="6" y1="18" x2="18" y2="6" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFD700" />
+          <stop offset="1" stopColor="#34A853" />
+        </linearGradient>
+      </defs>
+      <path d="M9.4 6H18v8.6M6 18 17.9 6.1" stroke={`url(#${id})`} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -23,38 +40,17 @@ function Chevron({ className = "" }: { className?: string }) {
 export function Header() {
   const [open, setOpen] = useState(false);
   const [dropdown, setDropdown] = useState<string | null>(null);
-  const [hovered, setHovered] = useState<number | null>(null);
+  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const navRef = useRef<HTMLElement>(null);
-  const itemRefs = useRef<(HTMLElement | null)[]>([]);
-  const pillRef = useRef<HTMLSpanElement>(null);
 
-  // The white pill sits on the hovered/open item, otherwise on the current page.
-  const activeIndex = nav.findIndex((item) => isActive(pathname, item));
-  const openIndex = nav.findIndex((item) => item.label === dropdown);
-  const target = hovered ?? (openIndex >= 0 ? openIndex : activeIndex);
-
-  // Move the pill by writing its position straight to the DOM (no re-render needed).
-  useLayoutEffect(() => {
-    const pill = pillRef.current;
-    if (!pill) return;
-    const place = (animate: boolean) => {
-      const el = itemRefs.current[target];
-      if (!el) {
-        pill.style.opacity = "0";
-        return;
-      }
-      pill.style.transitionProperty = animate ? "left, width, opacity" : "opacity";
-      pill.style.left = `${el.offsetLeft}px`;
-      pill.style.width = `${el.offsetWidth}px`;
-      pill.style.opacity = "1";
-    };
-    place(pill.dataset.ready === "1");
-    pill.dataset.ready = "1";
-    const onResize = () => place(false);
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, [target]);
+  // Like the live site: transparent at the top, a light blur once the page scrolls.
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 100);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   // Close an open dropdown on outside click or Escape.
   useEffect(() => {
@@ -75,40 +71,34 @@ export function Header() {
   };
 
   return (
-    // Same look at every scroll position (no scroll-triggered changes): blurred dark bar, menu in a glass capsule.
-    <header className={`fixed inset-x-0 top-0 z-40 border-b border-white/5 backdrop-blur-md ${open ? "bg-black/90" : "bg-black/55"}`}>
+    <header
+      // The blur sits on a ::before layer: a backdrop-filter on an ancestor would stop the dropdown panels from blurring.
+      className={`fixed inset-x-0 top-0 z-40 before:absolute before:inset-0 before:-z-10 before:transition-[backdrop-filter,background-color] before:duration-300 ${
+        open ? "before:bg-black/90 before:backdrop-blur-md" : scrolled ? "before:backdrop-blur-[6px]" : ""
+      }`}
+    >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-6 px-4 sm:px-6">
         <Link href="/" aria-label="Jerk at Nite home" className="shrink-0">
           <Image src={images.logo} alt="Jerk at Nite" width={174} height={30} priority />
         </Link>
 
-        {/* Desktop menu */}
+        {/* Desktop menu: dark glass capsule; current page and hovered items get a white pill. */}
         <nav ref={navRef} aria-label="Main" className="hidden lg:block">
-          <ul
-            onMouseLeave={() => setHovered(null)}
-            onBlur={(e) => !e.currentTarget.contains(e.relatedTarget) && setHovered(null)}
-            className="relative flex items-center gap-0.5 whitespace-nowrap rounded-full border border-white/10 bg-white/[0.06] p-1.5 text-[15px] font-medium shadow-lg shadow-black/30 backdrop-blur-md xl:gap-1 xl:text-[17px]"
-          >
-            <span
-              ref={pillRef}
-              aria-hidden
-              className="pointer-events-none absolute inset-y-1.5 rounded-full bg-white opacity-0 shadow-md duration-300 ease-out"
-            />
-            {nav.map((item, i) => {
+          <ul className="relative isolate flex items-center gap-0.5 whitespace-nowrap rounded-full p-1 text-[15px] font-medium shadow-lg shadow-black/20 before:absolute before:inset-0 before:-z-10 before:rounded-full before:bg-black/45 before:backdrop-blur-md xl:gap-1 xl:text-base">
+            {nav.map((item) => {
               const active = isActive(pathname, item);
-              const pill = `relative z-10 rounded-full transition-colors duration-300 ${i === target ? "text-black" : "text-white"}`;
-              const track = {
-                ref: (el: HTMLElement | null) => {
-                  itemRefs.current[i] = el;
-                },
-                onMouseEnter: () => setHovered(i),
-                onFocus: () => setHovered(i),
-              };
+              const pillBase = "rounded-full transition-colors duration-300";
 
               if (!item.children) {
                 return (
-                  <li key={item.href} {...track}>
-                    <Link href={item.href} aria-current={active ? "page" : undefined} className={`block px-3.5 py-2.5 xl:px-5 ${pill}`}>
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      aria-current={active ? "page" : undefined}
+                      className={`block px-3.5 py-2.5 xl:px-[18px] ${pillBase} ${
+                        active ? "bg-white text-black" : "text-white hover:bg-white hover:text-black focus-visible:bg-white focus-visible:text-black"
+                      }`}
+                    >
                       {item.label}
                     </Link>
                   </li>
@@ -116,10 +106,20 @@ export function Header() {
               }
 
               const expanded = dropdown === item.label;
+              const highlighted = active || expanded;
               return (
-                <li key={item.href} className="group relative" {...track}>
-                  <div className={`flex items-center ${pill}`}>
-                    <Link href={item.href} aria-current={pathname === item.href ? "page" : undefined} onClick={closeAll} className="py-2.5 pl-3.5 pr-1.5 xl:pl-5">
+                <li key={item.href} className="group relative">
+                  <div
+                    className={`flex items-center ${pillBase} ${
+                      highlighted ? "bg-white text-black" : "text-white group-hover:bg-white group-hover:text-black group-focus-within:bg-white group-focus-within:text-black"
+                    }`}
+                  >
+                    <Link
+                      href={item.href}
+                      aria-current={pathname === item.href ? "page" : undefined}
+                      onClick={closeAll}
+                      className="py-2.5 pl-3.5 pr-1.5 xl:pl-[18px]"
+                    >
                       {item.label}
                     </Link>
                     <button
@@ -128,30 +128,28 @@ export function Header() {
                       aria-expanded={expanded}
                       aria-controls={`menu-${item.label}`}
                       onClick={() => setDropdown(expanded ? null : item.label)}
-                      className="py-3 pl-1 pr-3 xl:pr-4"
+                      className="py-3 pl-1 pr-3.5 xl:pr-[18px]"
                     >
                       <Chevron className={expanded ? "rotate-180" : "group-hover:rotate-180"} />
                     </button>
                   </div>
 
-                  {/* pt-3 bridges the gap so hover isn't lost moving into the panel */}
+                  {/* pt-4 bridges the gap so hover isn't lost moving into the panel */}
                   <div
                     id={`menu-${item.label}`}
-                    className={`absolute left-1/2 top-full z-20 w-64 -translate-x-1/2 pt-3 ${
-                      expanded ? "block" : "hidden group-hover:block"
-                    }`}
+                    className={`absolute left-1/2 top-full z-20 w-60 -translate-x-1/2 pt-4 ${expanded ? "block" : "hidden group-hover:block"}`}
                   >
-                    <ul className="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-ink-3 to-black p-2 shadow-2xl shadow-black/60">
+                    <ul className="overflow-hidden rounded-lg border border-white/15 bg-gradient-to-b from-[#6b6b6b]/85 to-[#2b2b2b]/85 shadow-2xl shadow-black/40 backdrop-blur-xl">
                       {item.children.map((child) => (
-                        <li key={child.href}>
+                        <li key={child.href} className="border-b border-white/15 last:border-b-0">
                           <Link
                             href={child.href}
                             onClick={closeAll}
                             aria-current={pathname === child.href ? "page" : undefined}
-                            className="flex items-center justify-between rounded-xl px-4 py-3 text-base text-white transition-colors hover:bg-white/10 aria-[current=page]:text-gold"
+                            className="flex items-center justify-between gap-3 px-4 py-3.5 text-sm font-medium text-white transition-colors duration-200 hover:text-gold focus-visible:text-gold aria-[current=page]:text-gold"
                           >
                             {child.label}
-                            <span aria-hidden className="text-gradient text-lg font-bold">↗</span>
+                            <ArrowUpRight />
                           </Link>
                         </li>
                       ))}
@@ -164,7 +162,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <OrderButton className="hidden whitespace-nowrap sm:inline-flex" />
+          <OrderButton className="hidden whitespace-nowrap rounded-md px-5 py-2.5 sm:inline-flex" />
           <button
             className="rounded-lg p-2 lg:hidden"
             aria-label={open ? "Close menu" : "Open menu"}
