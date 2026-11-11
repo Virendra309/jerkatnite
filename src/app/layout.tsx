@@ -3,6 +3,7 @@ import { Anton, Manrope } from "next/font/google";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { OrderProvider } from "@/components/order";
+import { ScrollTop } from "@/components/scroll-top";
 import { days, images, locations, site } from "@/data/site";
 import "./globals.css";
 
@@ -50,6 +51,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Header />
           <main id="main" className="flex-1">{children}</main>
           <Footer />
+          <ScrollTop />
         </OrderProvider>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(restaurantJsonLd) }} />
       </body>

@@ -6,7 +6,16 @@
 
 import { images } from "./site";
 
-export type MenuItem = { name: string; description: string; image: string };
+export type MenuItem = {
+  name: string;
+  description: string;
+  image: string;
+  /** Choices shown under "View More" (protein, sides…). */
+  options?: string[];
+  /** Heading above the options, and how many can be picked. */
+  optionsLabel?: string;
+  pick?: number;
+};
 export type MenuTab = { title: string; items: MenuItem[] };
 
 export const menu: MenuTab[] = [
@@ -17,17 +26,23 @@ export const menu: MenuTab[] = [
         name: "Jerk Tacos",
         description: "2 big soft tacos filled with your choice of shredded meat, sautéed onions, peppers, and melted cheese.",
         image: images.tacos,
+        options: ["Chicken", "Veggies", "Salmon", "Oxtail"],
+        optionsLabel: "Choose your filling",
       },
       {
         name: "Kingston Kurry",
         description: "Slow cooked in rich flavorful curry sauce, with an array of herbs and spices. Chicken & Goat Options",
         image: images.catering1,
+        options: ["Chicken", "Goat"],
+        optionsLabel: "Choose your protein",
       },
       {
         name: "Alfredo Rasta Pasta",
         description:
           "Penne pasta tossed in extra virgin olive oil, housemade jerk Parmesan Alfredo sauce, fresh mozzarella, sautéed onions, and…",
         image: images.catering,
+        options: ["Jerk Seasoned Chicken", "Oxtail", "Jerk Salmon & Chicken"],
+        optionsLabel: "Choose your protein",
       },
       {
         name: "Slowly Braised Nanny Oxtails",
@@ -43,6 +58,9 @@ export const menu: MenuTab[] = [
         name: "Jammin Salmon",
         description: "Jerk-Teriyaki sauteed 6 oz. Salmon Fillet served with Organic Scallions and Peppers. Comes with two side options…",
         image: images.catering,
+        options: ["Cabbage", "Rice and Peas", "Ja'Mac & Cheese", "Plantains"],
+        optionsLabel: "Pick two sides",
+        pick: 2,
       },
     ],
   },

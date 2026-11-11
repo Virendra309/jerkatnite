@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import type { MenuItem, MenuTab } from "@/data/menu";
 import { OrderButton } from "./order";
 
@@ -15,7 +15,17 @@ function Chevron({ open }: { open: boolean }) {
 
 function MenuCard({ item, index, category }: { item: MenuItem; index: number; category?: string }) {
   const [expanded, setExpanded] = useState(false);
-  const long = item.description.length > 90;
+  const [picked, setPicked] = useState<string[]>([]);
+  const optsId = useId();
+  const max = item.pick ?? 1;
+  const hasOptions = !!item.options?.length;
+
+  const toggle = (opt: string) =>
+    setPicked((cur) => {
+      if (cur.includes(opt)) return cur.filter((o) => o !== opt);
+      if (max === 1) return [opt];
+      return cur.length < max ? [...cur, opt] : [...cur.slice(1), opt];
+    });
 
   return (
     <article
@@ -41,23 +51,60 @@ function MenuCard({ item, index, category }: { item: MenuItem; index: number; ca
 
       <div className="flex flex-1 flex-col px-2 pb-2 pt-4">
         <h3 className="display text-2xl leading-tight">{item.name}</h3>
-        <p className={`mt-2 text-sm leading-relaxed text-white/85 ${expanded ? "" : "line-clamp-3"}`}>{item.description}</p>
+        <p className="mt-2 text-sm leading-relaxed text-white/85">{item.description}</p>
 
-        <div className="mt-auto flex items-center justify-between gap-3 pt-4">
-          {long ? (
+        {hasOptions && (
+          <>
             <button
               type="button"
               aria-expanded={expanded}
+              aria-controls={optsId}
               onClick={() => setExpanded((v) => !v)}
-              className="flex items-center gap-2 text-sm font-medium text-white transition-colors hover:text-gold"
+              className="mt-4 flex items-center justify-between text-left font-medium text-white transition-colors hover:text-gold"
             >
-              {expanded ? "View Less" : "View More"}
+              {expanded ? "View less" : "View More"}
               <Chevron open={expanded} />
             </button>
-          ) : (
-            <span />
-          )}
-          <OrderButton className="rounded-[4px] px-3.5 py-1.5 text-sm font-semibold shadow-none">Order</OrderButton>
+
+            {/* grid-rows 0fr → 1fr animates the height smoothly */}
+            <div
+              id={optsId}
+              className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${expanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
+            >
+              <div className="overflow-hidden">
+                <p className="pt-3 text-[11px] font-semibold uppercase tracking-wider text-white/55">
+                  {item.optionsLabel ?? "Options"}
+                  {max > 1 && <span className="text-gold"> · {picked.length}/{max}</span>}
+                </p>
+                <ul className="flex flex-wrap gap-2 pt-2" aria-label={item.optionsLabel ?? "Options"}>
+                  {item.options!.map((opt) => {
+                    const on = picked.includes(opt);
+                    return (
+                      <li key={opt}>
+                        <button
+                          type="button"
+                          aria-pressed={on}
+                          tabIndex={expanded ? 0 : -1}
+                          onClick={() => toggle(opt)}
+                          className={`rounded-full border px-3 py-1.5 text-sm transition-all duration-200 ${
+                            on ? "border-gold bg-gold font-semibold text-ink" : "border-white/20 bg-black/20 text-white hover:border-gold/70"
+                          }`}
+                        >
+                          {on && <span aria-hidden>✓ </span>}
+                          {opt}
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </div>
+          </>
+        )}
+
+        <div className="mt-auto flex items-center justify-between gap-3 pt-4">
+          <span className="truncate text-xs text-white/60">{picked.length ? picked.join(" + ") : ""}</span>
+          <OrderButton className="shrink-0 rounded-[4px] px-3.5 py-1.5 text-sm font-semibold shadow-none">Order</OrderButton>
         </div>
       </div>
     </article>
