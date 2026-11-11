@@ -17,7 +17,7 @@ export default function MenuPage() {
     <>
       {/* Hero */}
       <section className="relative isolate flex min-h-[78vh] items-center justify-center overflow-hidden pb-16 pt-32 text-center">
-        <Image src={images.catering1} alt="" fill priority sizes="100vw" className="-z-20 object-cover" />
+        <Image src={images.catering1} alt="" fill priority sizes="100vw" className="animate-ken-burns -z-20 object-cover" />
         <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-b from-black/50 via-black/45 to-black" />
         <Container className="animate-rise">
           <nav aria-label="Breadcrumb" className="mx-auto inline-flex items-center gap-3 rounded-full bg-black/50 px-6 py-2 backdrop-blur-sm">
@@ -31,6 +31,22 @@ export default function MenuPage() {
             Caribbean spices. Every dish is made to be memorable, satisfying, and worth coming back for.
           </p>
           <OrderButton className="mt-8 rounded-[4px] px-5 py-2.5 font-semibold shadow-none">Order Online Now</OrderButton>
+        </Container>
+      </section>
+
+      {/* Highlights */}
+      <section aria-label="Why our food" className="border-y border-white/10 bg-black">
+        <Container className="grid divide-y divide-white/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+          {[
+            { title: "100% Halal", text: "Every dish, since day one" },
+            { title: "No MSG", text: "Natural ingredients, real spices" },
+            { title: "Made Fresh Daily", text: "Prepared fresh every day" },
+          ].map((h, i) => (
+            <div key={h.title} style={{ animationDelay: `${300 + i * 120}ms` }} className="animate-fade-up px-6 py-6 text-center">
+              <p className="display text-3xl text-gradient">{h.title}</p>
+              <p className="mt-1 text-sm text-white/65">{h.text}</p>
+            </div>
+          ))}
         </Container>
       </section>
 
