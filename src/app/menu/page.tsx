@@ -34,22 +34,6 @@ export default function MenuPage() {
         </Container>
       </section>
 
-      {/* Highlights */}
-      <section aria-label="Why our food" className="border-y border-white/10 bg-black">
-        <Container className="grid divide-y divide-white/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
-          {[
-            { title: "100% Halal", text: "Every dish, since day one" },
-            { title: "No MSG", text: "Natural ingredients, real spices" },
-            { title: "Made Fresh Daily", text: "Prepared fresh every day" },
-          ].map((h, i) => (
-            <div key={h.title} style={{ animationDelay: `${300 + i * 120}ms` }} className="animate-fade-up px-6 py-6 text-center">
-              <p className="display text-3xl text-gradient">{h.title}</p>
-              <p className="mt-1 text-sm text-white/65">{h.text}</p>
-            </div>
-          ))}
-        </Container>
-      </section>
-
       {/* Menu */}
       <section className="bg-black py-16">
         <Container>
