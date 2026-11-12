@@ -115,7 +115,7 @@ export default function LocationsPage() {
       <SocialReels />
       <DeliveryBanner />
       <PrivateEventsTeaser />
-      <Reserve image={images.catering1} cta="Book Your Spot Now" />
+      <Reserve image="/images/locations/reserved-bg.jpg" cta="Book Your Spot Now" overlay="bg-black/20" />
 
       {/* FAQ */}
       <section className="bg-gradient-to-b from-[#1c5a24] via-[#0b2410] to-black py-20">
