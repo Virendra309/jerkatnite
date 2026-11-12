@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { faqs, locations, type Location } from "@/data/site";
 import { OrderButton } from "./order";
-import { OpenBadge, TodayHoursText } from "./today-hours";
+import { OpenBadge, TodayHours, TodayHoursText } from "./today-hours";
 
 export function Container({ children, className = "" }: { children: ReactNode; className?: string }) {
   return <div className={`mx-auto max-w-7xl px-4 sm:px-6 ${className}`}>{children}</div>;
@@ -171,6 +171,50 @@ export function LocationCard({ loc }: { loc: Location }) {
         </Link>
       </div>
     </article>
+  );
+}
+
+/** Home-page location tiles: square, edge-to-edge photos with the city, today's hours and Order Now centred. */
+export function LocationTiles() {
+  return (
+    <div className="grid sm:grid-cols-2 lg:grid-cols-4">
+      {locations.map((loc) => {
+        const [name, state] = loc.city.split(",").map((x) => x.trim());
+        return (
+          <article key={loc.slug} className="group relative isolate aspect-square overflow-hidden">
+            <Image
+              src={loc.image}
+              alt=""
+              fill
+              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+              className="-z-20 object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-110"
+            />
+            <span aria-hidden className="absolute inset-0 -z-10 bg-black/60 transition-colors duration-500 group-hover:bg-black/45" />
+
+            <div className="flex h-full flex-col items-center justify-center gap-5 p-6 text-center">
+              {loc.comingSoon ? (
+                <>
+                  <h3 className="display text-4xl drop-shadow-lg xl:text-5xl">Coming Soon</h3>
+                  <Link href={`/locations/${loc.slug}`} className="text-xl font-medium text-gold transition-colors hover:text-white xl:text-2xl">
+                    {name} {state}
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <h3 className="display text-4xl drop-shadow-lg xl:text-5xl">
+                    <Link href={`/locations/${loc.slug}`} className="transition-colors hover:text-gold">
+                      {loc.city}
+                    </Link>
+                  </h3>
+                  <TodayHours slug={loc.slug} className="text-lg font-medium text-gold drop-shadow xl:text-2xl" />
+                  <OrderButton className="rounded-[4px] px-6 py-3 font-semibold shadow-none">Order Now</OrderButton>
+                </>
+              )}
+            </div>
+          </article>
+        );
+      })}
+    </div>
   );
 }
 

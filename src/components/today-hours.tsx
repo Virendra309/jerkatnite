@@ -69,14 +69,13 @@ function statusAt(week: WeekHours, minuteOfWeek: number): Status {
 // --- components ---------------------------------------------------------------------------
 
 /** "Today: 4:00 PM – 10:00 PM" line. */
-export function TodayHours({ slug }: { slug: string }) {
+export function TodayHours({ slug, className = "text-sm font-semibold text-leaf" }: { slug: string; className?: string }) {
   const now = useLocationMinuteOfWeek(slug);
   const hours = locations.find((l) => l.slug === slug)?.hours;
   if (!hours) return null;
   const today = now === null ? undefined : hours[Math.floor(now / 1440)];
-  return (
-    <span className="text-sm font-semibold text-leaf">{now === null ? "See hours" : `Today: ${today ?? "Closed"}`}</span>
-  );
+  // Placeholder keeps the same height before the browser knows the time.
+  return <span className={className}>{now === null ? "Today's hours" : `Today: ${today ?? "Closed"}`}</span>;
 }
 
 /** Live "Open now · until 10:00 PM" / "Closed now" pill. */

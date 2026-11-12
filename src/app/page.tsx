@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { OrderButton } from "@/components/order";
 import { PressStrip } from "@/components/press-strip";
-import { ButtonLink, Container, Faq, Heading, LocationGrid, OrderTicker } from "@/components/ui";
+import { ButtonLink, Container, Faq, Heading, LocationTiles, OrderTicker } from "@/components/ui";
 import { images, locations, reviews, site, socials } from "@/data/site";
 
 const features = [
@@ -91,7 +91,7 @@ export default function Home() {
       <OrderTicker />
 
       {/* Locations */}
-      <section className="py-24">
+      <section className="pt-24">
         <Container>
           <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
             <div>
@@ -106,8 +106,9 @@ export default function Home() {
               <ButtonLink href="/locations" variant="ghost">All Locations</ButtonLink>
             </div>
           </div>
-          <LocationGrid />
         </Container>
+        {/* full-width row of square photo tiles */}
+        <LocationTiles />
       </section>
 
       {/* QR / order */}
