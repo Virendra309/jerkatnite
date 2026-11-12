@@ -97,17 +97,17 @@ export const locations: Location[] = [
     hq: true,
     reservations: true,
     hours: ["3:00 PM – 10:00 PM", null, null, "4:00 PM – 10:00 PM", "4:00 PM – 10:00 PM", null, "5:00 PM – 1:00 AM"],
-    // Verified Baltimore store pages. "#" = link not added yet (button shows "Coming soon").
+    // Verified Baltimore store pages. Direct Pickup calls the number published on jerkatnite.com.
     order: {
       pickup: [
         { platform: "doordash", href: "https://www.doordash.com/store/jerk-at-nite-31800073/" },
-        { platform: "ubereats", href: "#" },
+        { platform: "ubereats", href: "https://www.ubereats.com/store/jerk-at-nite-21-n-eutaw-st/M3h02048Uk6hRRmJ30N5vg?diningMode=PICKUP" },
         { platform: "toast", href: "https://toast.app/r/jerk-at-night-baltimore-21-north-eutaw-street" },
-        { platform: "direct", href: "#" },
+        { platform: "direct", href: "tel:+14438351398" },
       ],
       delivery: [
         { platform: "doordash", href: "https://www.doordash.com/store/jerk-at-nite-31800073/" },
-        { platform: "ubereats", href: "#" },
+        { platform: "ubereats", href: "https://www.ubereats.com/store/jerk-at-nite-21-n-eutaw-st/M3h02048Uk6hRRmJ30N5vg?diningMode=DELIVERY" },
       ],
     },
   },

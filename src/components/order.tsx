@@ -149,11 +149,10 @@ export function OrderProvider({ children }: { children: ReactNode }) {
                         {o.href && o.href !== "#" ? (
                           <a
                             href={o.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            {...(o.href.startsWith("tel:") ? {} : { target: "_blank", rel: "noopener noreferrer" })}
                             className="mt-3 inline-flex w-full items-center justify-center rounded-[4px] bg-gradient-brand px-3 py-2.5 font-semibold text-ink transition hover:brightness-110"
                           >
-                            Order Now
+                            {o.href.startsWith("tel:") ? "Call to Order" : "Order Now"}
                           </a>
                         ) : (
                           <span
