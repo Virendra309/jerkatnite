@@ -1,7 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { faqs, locations, type Location } from "@/data/site";
-import { TodayHours } from "./today-hours";
+import { OrderButton } from "./order";
+import { OpenBadge, TodayHoursText } from "./today-hours";
 
 export function Container({ children, className = "" }: { children: ReactNode; className?: string }) {
   return <div className={`mx-auto max-w-7xl px-4 sm:px-6 ${className}`}>{children}</div>;
@@ -53,25 +54,104 @@ export function OrderTicker() {
   );
 }
 
-export function LocationCard({ loc }: { loc: Location }) {
+function PinIcon() {
   return (
-    <Link
-      href={`/locations/${loc.slug}`}
-      className="group flex flex-col justify-between rounded-2xl border border-white/10 bg-ink-2 p-6 transition hover:-translate-y-1 hover:border-leaf/60"
-    >
-      <div>
-        <h3 className="display text-4xl">{loc.city}</h3>
-        <p className="mt-2 text-white/70">{loc.address ?? "Opening soon"}</p>
+    <svg aria-hidden viewBox="0 0 24 24" className="mt-0.5 size-4 shrink-0 text-gold" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z" />
+      <circle cx="12" cy="10" r="2.5" />
+    </svg>
+  );
+}
+
+function ClockIcon() {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" className="size-4 shrink-0 text-gold" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3 2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function LocationCard({ loc }: { loc: Location }) {
+  const [name, state] = loc.city.split(",").map((x) => x.trim());
+  const directions = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.mapsQuery)}`;
+
+  if (loc.comingSoon) {
+    return (
+      <article className="flex flex-col rounded-2xl border border-dashed border-gold/30 bg-gradient-to-b from-gold/[0.06] to-transparent p-6">
+        <h3 className="display text-3xl leading-none">
+          {name}
+          {state && <span className="ml-2 align-middle text-sm font-sans font-semibold tracking-wide text-white/50">{state}</span>}
+        </h3>
+        <div className="mt-4 min-h-7">
+          <span className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/10 px-3 py-1 text-xs font-semibold text-gold">
+            <span className="size-2 rounded-full bg-gold" />
+            Coming soon
+          </span>
+        </div>
+        <p className="mt-5 flex-1 text-sm leading-relaxed text-white/60">
+          We&apos;re bringing the island vibes to {name}. Follow us on social for opening news.
+        </p>
+        <Link
+          href={`/locations/${loc.slug}`}
+          className="mt-6 inline-flex items-center gap-2 self-start text-sm font-semibold text-gold transition-colors hover:text-white"
+        >
+          Learn more <span aria-hidden>→</span>
+        </Link>
+      </article>
+    );
+  }
+
+  return (
+    <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-ink-3 to-ink-2 p-6 transition duration-300 hover:-translate-y-1 hover:border-leaf/50 hover:shadow-[0_18px_40px_-20px_rgba(52,168,83,0.55)]">
+      {/* thin gold → green accent line that brightens on hover */}
+      <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-gold via-lime to-leaf opacity-40 transition-opacity duration-300 group-hover:opacity-100" />
+
+      <div className="flex items-start justify-between gap-3">
+        <h3 className="display text-3xl leading-none">
+          <Link href={`/locations/${loc.slug}`} className="hover:text-gold">
+            {name}
+          </Link>
+          {state && <span className="ml-2 align-middle text-sm font-sans font-semibold tracking-wide text-white/50">{state}</span>}
+        </h3>
+        {loc.hq && <span className="shrink-0 rounded-full bg-leaf/15 px-2.5 py-1 text-[11px] font-bold tracking-wider text-leaf">HQ</span>}
       </div>
-      <div className="mt-6 flex items-center justify-between gap-3">
-        {loc.comingSoon ? (
-          <span className="rounded-full bg-gold/15 px-3 py-1 text-sm font-semibold text-gold">Coming soon</span>
-        ) : (
-          <TodayHours slug={loc.slug} />
-        )}
-        <span aria-hidden className="text-2xl text-gold transition group-hover:translate-x-1">→</span>
+
+      <div className="mt-4 min-h-7">
+        <OpenBadge slug={loc.slug} />
       </div>
-    </Link>
+
+      <ul className="mt-5 flex-1 space-y-3 text-sm text-white/75">
+        <li className="flex gap-2.5">
+          <PinIcon />
+          <span>{loc.address}</span>
+        </li>
+        <li className="flex items-center gap-2.5">
+          <ClockIcon />
+          <span>
+            <TodayHoursText slug={loc.slug} />
+          </span>
+        </li>
+      </ul>
+
+      <div className="mt-6 grid grid-cols-2 gap-2 border-t border-white/10 pt-5">
+        <a
+          href={directions}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center rounded-lg border border-white/15 px-3 py-2 text-sm font-semibold text-white transition-colors hover:border-gold hover:text-gold"
+        >
+          Directions
+        </a>
+        <OrderButton className="rounded-lg px-3 py-2 text-sm font-semibold shadow-none">Order</OrderButton>
+        <Link
+          href={`/locations/${loc.slug}`}
+          className="col-span-2 inline-flex items-center justify-center gap-2 pt-1 text-sm font-medium text-white/60 transition-colors hover:text-gold"
+        >
+          Hours &amp; details <span aria-hidden className="transition-transform group-hover:translate-x-1">→</span>
+        </Link>
+      </div>
+    </article>
   );
 }
 

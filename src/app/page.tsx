@@ -93,9 +93,18 @@ export default function Home() {
       {/* Locations */}
       <section className="py-24">
         <Container>
-          <div className="mb-10 flex flex-wrap items-end justify-between gap-6">
-            <Heading top={`We are located in ${openCount}`} accent="Different Areas" />
-            <ButtonLink href="/locations" variant="ghost">All Locations</ButtonLink>
+          <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-gold">Find us</p>
+              <Heading top={`We are located in ${openCount}`} accent="Different Areas" />
+            </div>
+            <div className="flex items-center gap-4">
+              <p className="hidden text-sm text-white/60 sm:block">
+                <span className="font-semibold text-white">{openCount}</span> open ·{" "}
+                <span className="font-semibold text-white">{locations.length - openCount}</span> coming soon
+              </p>
+              <ButtonLink href="/locations" variant="ghost">All Locations</ButtonLink>
+            </div>
           </div>
           <LocationGrid />
         </Container>
