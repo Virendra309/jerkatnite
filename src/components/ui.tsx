@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { faqs, locations, type Location } from "@/data/site";
@@ -78,18 +79,27 @@ export function LocationCard({ loc }: { loc: Location }) {
 
   if (loc.comingSoon) {
     return (
-      <article className="flex flex-col rounded-2xl border border-dashed border-gold/30 bg-gradient-to-b from-gold/[0.06] to-transparent p-6">
+      <article className="group relative isolate flex flex-col overflow-hidden rounded-2xl border border-dashed border-gold/40 p-6">
+      {/* food photo + dark overlay so text stays readable; photo zooms gently on hover */}
+      <Image
+        src={loc.image}
+        alt=""
+        fill
+        sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+        className="-z-20 object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-110"
+      />
+      <span aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-b from-black/55 via-black/75 to-black/95" />
         <h3 className="display text-3xl leading-none">
           {name}
           {state && <span className="ml-2 align-middle text-sm font-sans font-semibold tracking-wide text-white/50">{state}</span>}
         </h3>
         <div className="mt-4 min-h-7">
-          <span className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/10 px-3 py-1 text-xs font-semibold text-gold">
+          <span className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-black/65 px-3 py-1 text-xs font-semibold text-gold backdrop-blur-sm">
             <span className="size-2 rounded-full bg-gold" />
             Coming soon
           </span>
         </div>
-        <p className="mt-5 flex-1 text-sm leading-relaxed text-white/60">
+        <p className="mt-5 flex-1 text-sm leading-relaxed text-white/75">
           We&apos;re bringing the island vibes to {name}. Follow us on social for opening news.
         </p>
         <Link
@@ -103,7 +113,16 @@ export function LocationCard({ loc }: { loc: Location }) {
   }
 
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-ink-3 to-ink-2 p-6 transition duration-300 hover:-translate-y-1 hover:border-leaf/50 hover:shadow-[0_18px_40px_-20px_rgba(52,168,83,0.55)]">
+    <article className="group relative isolate flex flex-col overflow-hidden rounded-2xl border border-white/10 p-6 transition duration-300 hover:-translate-y-1 hover:border-leaf/50 hover:shadow-[0_18px_40px_-20px_rgba(52,168,83,0.55)]">
+      {/* food photo + dark overlay so text stays readable; photo zooms gently on hover */}
+      <Image
+        src={loc.image}
+        alt=""
+        fill
+        sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+        className="-z-20 object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-110"
+      />
+      <span aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-b from-black/55 via-black/75 to-black/95" />
       {/* thin gold → green accent line that brightens on hover */}
       <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-gold via-lime to-leaf opacity-40 transition-opacity duration-300 group-hover:opacity-100" />
 
@@ -114,14 +133,14 @@ export function LocationCard({ loc }: { loc: Location }) {
           </Link>
           {state && <span className="ml-2 align-middle text-sm font-sans font-semibold tracking-wide text-white/50">{state}</span>}
         </h3>
-        {loc.hq && <span className="shrink-0 rounded-full bg-leaf/15 px-2.5 py-1 text-[11px] font-bold tracking-wider text-leaf">HQ</span>}
+        {loc.hq && <span className="shrink-0 rounded-full border border-leaf/50 bg-black/65 px-2.5 py-1 text-[11px] font-bold tracking-wider text-leaf backdrop-blur-sm">HQ</span>}
       </div>
 
       <div className="mt-4 min-h-7">
         <OpenBadge slug={loc.slug} />
       </div>
 
-      <ul className="mt-5 flex-1 space-y-3 text-sm text-white/75">
+      <ul className="mt-5 flex-1 space-y-3 text-sm text-white/85">
         <li className="flex gap-2.5">
           <PinIcon />
           <span>{loc.address}</span>
@@ -139,7 +158,7 @@ export function LocationCard({ loc }: { loc: Location }) {
           href={directions}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center rounded-lg border border-white/15 px-3 py-2 text-sm font-semibold text-white transition-colors hover:border-gold hover:text-gold"
+          className="inline-flex items-center justify-center rounded-lg border border-white/20 bg-black/50 px-3 py-2 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:border-gold hover:text-gold"
         >
           Directions
         </a>

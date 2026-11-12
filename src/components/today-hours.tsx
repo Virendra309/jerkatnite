@@ -88,7 +88,7 @@ export function OpenBadge({ slug }: { slug: string }) {
 
   const s = statusAt(hours, now);
   return s.open ? (
-    <span className="inline-flex items-center gap-2 rounded-full border border-leaf/40 bg-leaf/10 px-3 py-1 text-xs font-semibold text-leaf">
+    <span className="inline-flex items-center gap-2 rounded-full border border-leaf/50 bg-black/65 px-3 py-1 backdrop-blur-sm text-xs font-semibold text-leaf">
       <span className="relative flex size-2">
         <span className="absolute inline-flex size-full animate-ping rounded-full bg-leaf opacity-60 motion-reduce:animate-none" />
         <span className="relative inline-flex size-2 rounded-full bg-leaf" />
@@ -96,7 +96,7 @@ export function OpenBadge({ slug }: { slug: string }) {
       Open now{s.until ? ` · until ${s.until}` : ""}
     </span>
   ) : (
-    <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold text-white/60">
+    <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/65 px-3 py-1 backdrop-blur-sm text-xs font-semibold text-white/60">
       <span className="size-2 rounded-full bg-chili/80" />
       Closed now
     </span>

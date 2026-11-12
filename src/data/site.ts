@@ -54,6 +54,8 @@ export type Location = {
   short: string;
   /** IANA time zone the hours are in, used for the live "Open now" badge. */
   timeZone: string;
+  /** Background photo for the location card. */
+  image: string;
   hq?: boolean;
   /** Set to false to hide this location from the Order Now popup (as on the live site). */
   orderPopup?: boolean;
@@ -82,6 +84,7 @@ export const locations: Location[] = [
     address: "21 N Eutaw St, Baltimore, MD 21201",
     mapsQuery: "21 N Eutaw St, Baltimore, MD 21201",
     short: "Baltimore",
+    image: images.catering1,
     timeZone: "America/New_York",
     hq: true,
     reservations: true,
@@ -106,6 +109,7 @@ export const locations: Location[] = [
     address: null,
     mapsQuery: "Washington, DC",
     short: "Washington DC",
+    image: images.catering,
     timeZone: "America/New_York",
     comingSoon: true,
     hours: null,
@@ -118,6 +122,7 @@ export const locations: Location[] = [
     address: "12970 Westheimer Rd, Houston, TX 77007",
     mapsQuery: "12970 Westheimer Rd, Houston, TX",
     short: "Houston",
+    image: images.tacos,
     timeZone: "America/Chicago",
     orderPopup: false,
     hours: ["4:00 PM – 10:00 PM", null, "5:30 PM – 10:30 PM", null, null, null, "5:00 PM – 1:00 AM"],
@@ -129,6 +134,7 @@ export const locations: Location[] = [
     address: "19163 Livernois Ave, Detroit, MI 48221",
     mapsQuery: "19163 Livernois Ave, Detroit, MI 48221",
     short: "Detroit",
+    image: images.wings,
     timeZone: "America/Detroit",
     hours: ["12:00 PM – 6:00 PM", null, "12:00 PM – 9:00 PM", "12:00 PM – 9:00 PM", "12:00 PM – 9:00 PM", "12:00 PM – 11:00 PM", "12:00 PM – 11:00 PM"],
     order: { pickup: pickupAll.filter((o) => o.platform !== "toast"), delivery: deliveryAll },
