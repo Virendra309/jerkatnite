@@ -37,6 +37,10 @@ export const images = {
   catering1: `${up}/2026/05/DSC03488-1024x683.jpg`,
   catering2: `${up}/2026/04/DSC03696-1024x683.jpg`,
   catering3: `${up}/2026/04/DSC03815-1024x683.jpg`,
+  instagramPhone: `${up}/2026/03/iphone16pro.png`,
+  star: `${up}/2026/03/Vectosar.png`,
+  eventThumb: `${up}/2026/03/Rectangle-39433.png`,
+  google: `${up}/2026/03/Rectangled-39428.png`,
 };
 
 /** Hours indexed by day of week: 0 = Sunday … 6 = Saturday. `null` = closed. */

@@ -1,9 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { OrderButton } from "@/components/order";
+import { CapturedMoments } from "@/components/home/captured-moments";
+import { CateringSlider } from "@/components/home/catering-slider";
+import { ReviewsMarquee } from "@/components/home/reviews-marquee";
 import { PressStrip } from "@/components/press-strip";
 import { ButtonLink, Container, Faq, Heading, LocationTiles, OrderTicker } from "@/components/ui";
-import { images, locations, reviews, site, socials } from "@/data/site";
+import { images, locations, site, socials } from "@/data/site";
 
 const features = [
   { title: "Food Menu", text: "Bold Jamaican flavors, made fresh daily. All Halal, no MSG.", img: images.tacos, alt: "Jerk at Nite tacos", href: "/menu", cta: "Explore Our Menu", tilt: "-rotate-2" },
@@ -111,68 +114,87 @@ export default function Home() {
         <LocationTiles />
       </section>
 
-      {/* QR / order */}
-      <section className="py-12">
-        <Container>
-          <div className="grid items-center gap-8 rounded-3xl border border-white/10 bg-gradient-to-br from-ink-3 to-ink-2 p-8 sm:grid-cols-[auto_1fr] sm:p-12">
-            <Image src={images.qr} alt="QR code linking to the Jerk at Nite menu" width={165} height={166} className="rounded-xl bg-white p-2" />
-            <div>
-              <h2 className="display text-4xl sm:text-5xl"><span className="text-gradient">Scan the QR code</span> and order your favorite food now!</h2>
-              <p className="mt-3 text-white/70">A diverse menu of flavorful Jamaican and Caribbean dishes.</p>
-              <div className="mt-6"><OrderButton /></div>
-            </div>
-          </div>
-        </Container>
-      </section>
+      <CapturedMoments />
 
-      {/* Private events teaser */}
-      <section className="py-24">
-        <Container className="grid items-center gap-12 lg:grid-cols-2">
-          <Image src={images.events} alt="Private event at Jerk at Nite" width={1014} height={1024} sizes="(min-width: 1024px) 50vw, 100vw" className="mx-auto w-full max-w-lg" />
+      {/* Private events */}
+      <section className="relative overflow-hidden bg-black py-24">
+        {/* decorative sparkles */}
+        <Image src={images.star} alt="" width={83} height={83} aria-hidden className="pointer-events-none absolute left-4 top-16 w-16 opacity-30 blur-[1px] sm:left-8" />
+        <svg aria-hidden viewBox="0 0 24 24" className="pointer-events-none absolute bottom-10 left-6 size-14 text-[#8dff3a] sm:left-10">
+          <path d="M12 2v20M2 12h20M4.9 4.9l14.2 14.2M19.1 4.9 4.9 19.1" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" />
+        </svg>
+        <div aria-hidden className="pointer-events-none absolute left-1/2 top-1/2 size-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-leaf/10 blur-3xl" />
+
+        <Container className="relative grid items-center gap-12 lg:grid-cols-2">
+          <Image
+            src={images.events}
+            alt="Guests celebrating a birthday party at Jerk at Nite"
+            width={1014}
+            height={1024}
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            className="mx-auto w-full max-w-lg transition-transform duration-700 hover:-rotate-1 hover:scale-[1.02]"
+          />
           <div>
-            <Heading top="Private Events" accent="at Jerk at Nite" />
-            <p className="mt-6 text-white/75">
-              From intimate birthday dinners to full-scale corporate mixers, the Jerk at Nite experience is the perfect setting for
-              your next occasion. A private room is available for special events.
+            <h2 className="display text-5xl sm:text-7xl">
+              <span className="text-gradient block">Private Events</span>
+              <span className="flex items-center gap-3">
+                at Jerkatnite
+                <Image src={images.eventThumb} alt="" width={94} height={70} aria-hidden className="h-12 w-auto rounded border-2 border-white sm:h-14" />
+              </span>
+            </h2>
+            <p className="mt-6 text-lg leading-relaxed text-white/85">
+              From intimate birthday dinners to full-scale corporate mixers, the Jerk at Nite experience is the perfect setting for your
+              next occasion. Bold Jamaican food, an unforgettable atmosphere, and a team that makes sure every event runs smoothly. A
+              private room is also available for special events.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-              <ButtonLink href="/private-events">Plan Your Booking</ButtonLink>
-              <ButtonLink href="/contact" variant="ghost">Contact Us</ButtonLink>
+              <Link href="/private-events" className="btn-primary rounded-[4px] px-5 py-2.5 font-semibold shadow-none">
+                Plan Your Booking
+              </Link>
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center rounded-[4px] bg-white px-5 py-2.5 font-semibold text-black transition hover:-translate-y-0.5 hover:bg-gold"
+              >
+                Contact Us
+              </Link>
             </div>
           </div>
         </Container>
       </section>
 
-      {/* Reviews */}
-      <section className="bg-ink-2 py-24">
-        <Container>
-          <Heading top="What people are saying about" accent="Jerk at Nite" />
-          <ul className="mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4">
-            {reviews.map((r) => (
-              <li key={r} className="flex min-h-80 w-[85%] shrink-0 snap-start flex-col justify-between rounded-2xl border border-white/10 bg-gradient-to-b from-ink-3 to-ink p-6 sm:w-[45%] lg:w-[31%]">
-                <span aria-hidden className="display text-7xl text-gradient">“</span>
-                <blockquote className="display text-2xl leading-tight sm:text-3xl">{r}</blockquote>
-                <p aria-label="5 out of 5 stars" className="mt-6 text-gold">★★★★★</p>
-              </li>
-            ))}
-          </ul>
-        </Container>
-      </section>
+      <ReviewsMarquee />
 
-      {/* Catering teaser */}
-      <section className="py-24">
+      {/* Catering */}
+      <section className="bg-gradient-to-b from-[#1c5a24] via-[#0b2410] to-black py-24">
         <Container className="grid items-center gap-12 lg:grid-cols-2">
           <div>
-            <Heading top="Catering Services" accent="at Jerk at Nite" />
-            <p className="mt-6 text-white/75">
-              Bring the authentic flavors of Jerk at Nite to your home or office. Fresh, beautifully presented food prepared daily
-              for any size gathering.
+            <h2 className="display text-5xl sm:text-7xl">
+              <span className="text-gradient block">Catering Services</span>
+              <span className="block">at Jerkatnite</span>
+            </h2>
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/90">
+              Bring the authentic flavors of Jerkatnite to your home or office. Our team specializes in fresh, beautifully presented food
+              prepared daily for any size gathering.
             </p>
-            <div className="mt-8"><ButtonLink href="/catering">Request Catering</ButtonLink></div>
+            <div className="mt-8 flex flex-wrap gap-4">
+              <Link href="/catering" className="btn-primary rounded-[4px] px-5 py-2.5 font-semibold shadow-none">
+                Request Catering Service
+              </Link>
+              <Link
+                href="/catering"
+                className="inline-flex items-center justify-center rounded-[4px] bg-white px-5 py-2.5 font-semibold text-black transition hover:-translate-y-0.5 hover:bg-gold"
+              >
+                View Catering Menu
+              </Link>
+            </div>
           </div>
-          <div className="relative aspect-[3/2] overflow-hidden rounded-3xl">
-            <Image src={images.catering1} alt="Catering trays of Jamaican food" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
-          </div>
+          <CateringSlider
+            slides={[
+              { src: images.catering1, alt: "Jerk chicken plate with rice and peas" },
+              { src: images.catering2, alt: "Jerk wings" },
+              { src: images.catering3, alt: "Dessert" },
+            ]}
+          />
         </Container>
       </section>
 

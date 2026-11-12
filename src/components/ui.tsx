@@ -194,19 +194,19 @@ export function LocationTiles() {
             <div className="flex h-full flex-col items-center justify-center gap-5 p-6 text-center">
               {loc.comingSoon ? (
                 <>
-                  <h3 className="display text-4xl drop-shadow-lg xl:text-5xl">Coming Soon</h3>
-                  <Link href={`/locations/${loc.slug}`} className="text-xl font-medium text-gold transition-colors hover:text-white xl:text-2xl">
+                  <h3 className="display whitespace-nowrap text-4xl drop-shadow-lg lg:text-[2.6rem] 2xl:text-5xl">Coming Soon</h3>
+                  <Link href={`/locations/${loc.slug}`} className="text-xl font-medium text-gold transition-colors hover:text-white 2xl:text-2xl">
                     {name} {state}
                   </Link>
                 </>
               ) : (
                 <>
-                  <h3 className="display text-4xl drop-shadow-lg xl:text-5xl">
+                  <h3 className="display whitespace-nowrap text-4xl drop-shadow-lg lg:text-[2.6rem] 2xl:text-5xl">
                     <Link href={`/locations/${loc.slug}`} className="transition-colors hover:text-gold">
                       {loc.city}
                     </Link>
                   </h3>
-                  <TodayHours slug={loc.slug} className="text-lg font-medium text-gold drop-shadow xl:text-2xl" />
+                  <TodayHours slug={loc.slug} className="whitespace-nowrap text-lg font-medium text-gold drop-shadow lg:text-[17px] xl:text-xl 2xl:text-2xl" />
                   <OrderButton className="rounded-[4px] px-6 py-3 font-semibold shadow-none">Order Now</OrderButton>
                 </>
               )}
