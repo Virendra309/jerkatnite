@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { OrderButton } from "@/components/order";
-import { ButtonLink, Container, Faq, Heading, LocationGrid, Marquee, OrderTicker } from "@/components/ui";
-import { images, locations, press, reviews, site, socials } from "@/data/site";
+import { PressStrip } from "@/components/press-strip";
+import { ButtonLink, Container, Faq, Heading, LocationGrid, OrderTicker } from "@/components/ui";
+import { images, locations, reviews, site, socials } from "@/data/site";
 
 const features = [
   { title: "Food Menu", text: "Bold Jamaican flavors, made fresh daily. All Halal, no MSG.", img: images.tacos, alt: "Jerk at Nite tacos", href: "/menu", cta: "Explore Our Menu", tilt: "-rotate-2" },
@@ -65,13 +66,7 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* Press */}
-      <section aria-labelledby="press" className="border-y border-white/10 py-10">
-        <Container>
-          <h2 id="press" className="display text-center text-3xl">As Featured <span className="text-gradient">or Seen In</span></h2>
-        </Container>
-        <Marquee items={press} className="mt-6 text-2xl font-bold text-white/50" />
-      </section>
+      <PressStrip />
 
       {/* About */}
       <section className="py-24">

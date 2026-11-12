@@ -44,8 +44,11 @@ export function Marquee({ items, className = "" }: { items: string[]; className?
 
 export function OrderTicker() {
   return (
-    <div className="-rotate-2 bg-gradient-brand py-4 text-ink">
-      <Marquee items={Array(8).fill("Order Now")} className="display text-4xl sm:text-5xl" />
+    // Outer wrapper clips the tilted band so it can't cause sideways scrolling.
+    <div className="overflow-hidden py-3">
+      <div className="-mx-4 -rotate-2 bg-gradient-brand py-4 text-ink">
+        <Marquee items={Array(8).fill("Order Now")} className="display text-4xl sm:text-5xl" />
+      </div>
     </div>
   );
 }
