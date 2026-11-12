@@ -12,13 +12,15 @@ type Toast = { id: number; title: string; qty: number; msg: string };
 const money = (p: string | null) => (p && /^\$\d/.test(p) ? Number(p.replace(/[^0-9.]/g, "")) : null);
 
 /** Placeholder used by the live site for items without a photo: neon J logo. */
-function JLogo() {
+function JLogo({ light = false }: { light?: boolean }) {
   return (
-    <div className="grid size-full place-items-center bg-[#0d1f10]">
+    <div className={`grid size-full place-items-center ${light ? "bg-white" : "bg-[#0d1f10]"}`}>
       <svg viewBox="0 0 120 120" className="h-[85%] w-auto" aria-hidden>
         <circle cx="60" cy="60" r="54" fill="none" stroke="#9be564" strokeWidth="9" />
         <circle cx="60" cy="60" r="34" fill="none" stroke="#9be564" strokeWidth="7" />
-        <path d="M66 26v42a14 14 0 0 1-28 0" fill="none" stroke="#ef4f3b" strokeWidth="9" strokeLinecap="round" />
+        {light && <circle cx="60" cy="60" r="54" fill="none" stroke="#111" strokeWidth="2" />}
+        <path d="M66 26v42a14 14 0 0 1-28 0" fill="none" stroke={light ? "#111" : "#ef4f3b"} strokeWidth={light ? 13 : 9} strokeLinecap="round" />
+        {light && <path d="M66 26v42a14 14 0 0 1-28 0" fill="none" stroke="#ef4f3b" strokeWidth="8" strokeLinecap="round" />}
       </svg>
     </div>
   );
@@ -180,7 +182,7 @@ export function CateringOrder({ tabs, locations }: { tabs: CateringTab[]; locati
                   {item.image ? (
                     <Image src={item.image} alt={item.name} fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
                   ) : (
-                    <JLogo />
+                    <JLogo light={item.lightLogo} />
                   )}
                 </div>
                 <div className="flex flex-1 flex-col px-1 pb-3 pt-4">
@@ -243,7 +245,7 @@ export function CateringOrder({ tabs, locations }: { tabs: CateringTab[]; locati
                     {lines.map((l) => (
                       <li key={l.key} className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/40 p-2">
                         <div className="relative size-16 shrink-0 overflow-hidden rounded-md">
-                          {l.item.image ? <Image src={l.item.image} alt="" fill sizes="64px" className="object-cover" /> : <JLogo />}
+                          {l.item.image ? <Image src={l.item.image} alt="" fill sizes="64px" className="object-cover" /> : <JLogo light={l.item.lightLogo} />}
                         </div>
                         <div className="min-w-0 flex-1">
                           <p className="display truncate text-lg leading-tight">{l.item.name}</p>
