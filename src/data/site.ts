@@ -97,13 +97,13 @@ export const locations: Location[] = [
     hq: true,
     reservations: true,
     hours: ["3:00 PM – 10:00 PM", null, null, "4:00 PM – 10:00 PM", "4:00 PM – 10:00 PM", null, "5:00 PM – 1:00 AM"],
-    // Verified Baltimore store pages. Direct Pickup calls the number published on jerkatnite.com.
+    // Verified Baltimore store pages. Direct Pickup opens the restaurant in Google Maps, as on jerkatnite.com.
     order: {
       pickup: [
         { platform: "doordash", href: "https://www.doordash.com/store/jerk-at-nite-31800073/" },
         { platform: "ubereats", href: "https://www.ubereats.com/store/jerk-at-nite-21-n-eutaw-st/M3h02048Uk6hRRmJ30N5vg?diningMode=PICKUP" },
         { platform: "toast", href: "https://toast.app/r/jerk-at-night-baltimore-21-north-eutaw-street" },
-        { platform: "direct", href: "tel:+14438351398" },
+        { platform: "direct", href: "https://www.google.com/maps/place/Jerk+at+Nite/@39.2898,-76.6196,17z/data=!3m1!4b1!4m6!3m5!1s0x89c805b7f38709fd:0x510f77eb265294d0" },
       ],
       delivery: [
         { platform: "doordash", href: "https://www.doordash.com/store/jerk-at-nite-31800073/" },
@@ -150,8 +150,8 @@ export const locations: Location[] = [
       pickup: [
         { platform: "doordash", href: "https://order.online/store/jerkatnite-detroit-detroit-32158157/?pickup=true" },
         { platform: "ubereats", href: "https://www.ubereats.com/store/jerk-at-nite/ik__cPG1VTyFGwPeqjQOLw?diningMode=PICKUP" },
-        { platform: "toast", href: "#" },
-        { platform: "direct", href: "#" },
+        { platform: "toast", href: "https://order.toasttab.com/online/jerk-at-nite-detroit-19163-livernois-ave?diningOption=takeout" },
+        { platform: "direct", href: "https://www.google.com/maps/place/JerkatNite+Detroit/@42.4326293,-83.1444195,17z/data=!3m1!4b1!4m6!3m5!1s0x8824cf4677790669:0xc7467c2ca320eb7f" },
       ],
       delivery: [
         { platform: "doordash", href: "https://order.online/store/jerkatnite-detroit-detroit-32158157/" },
