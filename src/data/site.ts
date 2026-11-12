@@ -15,12 +15,16 @@ export const site = {
 };
 
 
+// Links taken from the live jerkatnite.com (Facebook / Instagram confirmed in the reference video).
+// Phone screenshots are the live site's images.
+const socialUp = "https://jerkatnite.com/wp-content/uploads/2026/03";
 export const socials = [
-  { label: "Instagram", href: "https://www.instagram.com/jerkatnite/", followers: "502k" },
-  { label: "TikTok", href: "https://www.tiktok.com/@jerkatnite", followers: "16.3k" },
-  { label: "Facebook", href: "https://www.facebook.com/jerkatnite/", followers: "7.1k" },
-  { label: "X (Twitter)", href: "https://x.com/JerkAtNite", followers: "3.1k" },
-];
+  { id: "facebook", label: "Facebook", href: "https://www.facebook.com/jerkatnite/", followers: "7.1K", phone: `${socialUp}/PHONE.png` },
+  { id: "instagram", label: "Instagram", href: "https://www.instagram.com/jerkatnite/", followers: "502K", phone: `${socialUp}/iphone16pro.png` },
+  { id: "tiktok", label: "TikTok", href: "https://www.tiktok.com/@jerkatnite", followers: "16.3K", phone: `${socialUp}/PsdNE.png` },
+  { id: "x", label: "X (Twitter)", href: "https://x.com/JerkAtNite", followers: "3.1K", phone: `${socialUp}/iphonzcro.png` },
+] as const;
+export const youtube = "https://www.youtube.com/hashtag/jerkatnite";
 
 // Images are currently served from the existing WordPress site.
 // Move them into /public/images when the old site is retired.
@@ -166,42 +170,47 @@ export const reviews = [
   "This place is a must-visit if you love Caribbean food. The portions are generous, the flavors are bold, and the atmosphere is great.",
 ];
 
+// Questions and answers as on the live site.
 export const faqs = [
   {
     q: "What kind of food does Jerk at Nite serve?",
-    a: "A fusion of authentic Jamaican flavors, Caribbean spices and American soul food — jerk chicken, tender oxtail, tacos, wings and more, made fresh daily.",
+    a: "Jerk at Nite serves a unique fusion of authentic Jamaican flavors, Caribbean spices, and American soul food. Our menu is packed with bold, smoky dishes made fresh daily, ranging from traditional favorites to creative culinary twists — jerk chicken, tender oxtail, tacos, wings and more.",
   },
   {
-    q: "Is all the food Halal?",
-    a: "Yes. 100% of the menu is Halal, and it has been that way since day one.",
+    q: "Is all the food served at Jerk at Nite Halal-certified?",
+    a: "Yes, 100% of the menu at Jerk at Nite is completely Halal. We are committed to maintaining strict sourcing and preparation standards so that our community can enjoy clean, wholesome Caribbean food with total peace of mind.",
   },
   {
     q: "What are the hours of operation?",
-    a: "Hours vary by location, with extended late-night hours on weekends at select spots. Check the Locations page for today's hours near you.",
+    a: "Most locations are open from 4 PM to 10 PM daily, with extended hours on weekends at select spots. Hours can vary by location, so check the Locations page for the latest hours near you.",
+  },
+  {
+    q: "Does Jerk at Nite serve halal food?",
+    a: "Yes, all meat at Jerk at Nite is 100% halal. It has been that way since day one because we believe great food should be for everyone.",
   },
   {
     q: "Can I order online or get delivery?",
-    a: "Yes. Order through DoorDash, Grubhub, Uber Eats, Toast, or pick up directly depending on your location — just hit Order Now.",
+    a: "Yes. You can order through DoorDash, Uber Eats, Toast, or direct pickup depending on your location. Just hit Order Now to pick your nearest spot and preferred platform.",
   },
   {
     q: "Is Jerk at Nite good for first-time Caribbean food eaters?",
-    a: "Absolutely. Dishes like rasta pasta, jerk tacos, and rice and peas are an easy way in, and our chefs have 12+ years of experience making Caribbean flavors approachable.",
+    a: "Absolutely. The fusion menu makes it really easy to ease in, especially with dishes like rasta pasta, jerk tacos, and rice and peas. Our chefs have 12+ years of experience making Caribbean flavors feel approachable and unforgettable.",
   },
   {
-    q: "Do you use MSG or preservatives?",
-    a: "Never. Every dish is made fresh with natural ingredients and real Caribbean spices.",
+    q: "Does Jerk at Nite use MSG or preservatives?",
+    a: "Never. Every dish is made fresh with natural ingredients and real Caribbean spices, zero shortcuts. It is one of the things that makes the food taste genuinely different.",
   },
   {
-    q: "Do you offer catering?",
-    a: "Yes — from office lunches to wedding receptions, we bring fresh trays of bold Jamaican dishes straight to your event.",
+    q: "Does Jerk at Nite offer catering?",
+    a: "Yes, and we are really good at it. From office lunches to wedding receptions, we bring fresh trays of bold Jamaican dishes straight to your event. See the Catering page to request a quote.",
   },
   {
-    q: "Can I host a private event?",
-    a: "Yes. Birthdays, corporate mixers, sports events, weddings and more. A private room is available for special events.",
+    q: "Can I host a private event at Jerk at Nite?",
+    a: "We certainly do. From birthdays and corporate mixers to celebrity gatherings, sports events, and weddings, we accommodate all types of occasions. Visit the Private Events page to submit a booking inquiry.",
   },
   {
     q: "How do I make a reservation?",
-    a: "Reservations are available at the Baltimore (HQ) location through OpenTable. Walk-ins are welcome everywhere else.",
+    a: "Reservations are currently available at the Baltimore (HQ) location through OpenTable. Walk-ins are welcome everywhere else, but weekends fill up fast.",
   },
 ];
 

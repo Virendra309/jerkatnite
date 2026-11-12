@@ -234,15 +234,27 @@ export function Faq() {
   };
   return (
     <>
-      <div className="grid gap-4 lg:grid-cols-2">
-        {faqs.map((f, i) => (
-          <details key={f.q} className="group rounded-xl border border-white/10 bg-ink-2 p-5 open:border-leaf/50">
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold">
-              <span>{i + 1}. {f.q}</span>
-              <span aria-hidden className="grid size-9 shrink-0 place-items-center rounded-full bg-white/5 text-xl text-gold transition group-open:rotate-45">+</span>
-            </summary>
-            <p className="mt-3 text-white/70">{f.a}</p>
-          </details>
+      {/* two columns like the live site: 1–5 left, 6–10 right */}
+      <div className="grid gap-x-10 lg:grid-cols-2">
+        {[faqs.slice(0, Math.ceil(faqs.length / 2)), faqs.slice(Math.ceil(faqs.length / 2))].map((col, c) => (
+          <div key={c}>
+            {col.map((f, i) => (
+              <details key={f.q} className="group border-b border-white/15">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 [&::-webkit-details-marker]:hidden">
+                  <span className="display text-xl leading-tight transition-colors group-hover:text-gold group-open:text-gold sm:text-2xl">
+                    {c * Math.ceil(faqs.length / 2) + i + 1}. {f.q}
+                  </span>
+                  <span
+                    aria-hidden
+                    className="grid size-8 shrink-0 place-items-center rounded-full bg-gradient-to-br from-gold/20 to-leaf/25 text-lg font-bold text-[#c6f135] transition-transform duration-300 group-open:rotate-45"
+                  >
+                    +
+                  </span>
+                </summary>
+                <p className="pb-5 pr-12 leading-relaxed text-white/80">{f.a}</p>
+              </details>
+            ))}
+          </div>
         ))}
       </div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />

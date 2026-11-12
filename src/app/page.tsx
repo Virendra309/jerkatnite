@@ -3,10 +3,12 @@ import Link from "next/link";
 import { OrderButton } from "@/components/order";
 import { CapturedMoments } from "@/components/home/captured-moments";
 import { CateringSlider } from "@/components/home/catering-slider";
+import { Reserve } from "@/components/home/reserve";
 import { ReviewsMarquee } from "@/components/home/reviews-marquee";
+import { SocialPresence } from "@/components/home/social-presence";
 import { PressStrip } from "@/components/press-strip";
 import { ButtonLink, Container, Faq, Heading, LocationTiles, OrderTicker } from "@/components/ui";
-import { images, locations, site, socials } from "@/data/site";
+import { images, locations, site } from "@/data/site";
 
 const features = [
   { title: "Food Menu", text: "Bold Jamaican flavors, made fresh daily. All Halal, no MSG.", img: images.tacos, alt: "Jerk at Nite tacos", href: "/menu", cta: "Explore Our Menu", tilt: "-rotate-2" },
@@ -200,43 +202,16 @@ export default function Home() {
 
       <OrderTicker />
 
-      {/* Socials */}
-      <section className="py-24">
-        <Container>
-          <Heading top="Our noticeable" accent="Social Presence" />
-          <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {socials.map((s) => (
-              <li key={s.label}>
-                <a href={s.href} target="_blank" rel="noopener noreferrer" className="block rounded-2xl border border-white/10 bg-ink-2 p-6 transition hover:-translate-y-1 hover:border-leaf/60">
-                  <p className="text-white/70">{s.label} · @jerkatnite</p>
-                  <p className="display mt-3 text-5xl text-gradient">{s.followers}</p>
-                  <p className="text-white/70">Followers</p>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </Container>
-      </section>
+      <SocialPresence />
 
-      {/* Reservations */}
-      <section className="bg-gradient-to-b from-ink to-ink-3 py-24 text-center">
-        <Container>
-          <p className="font-semibold uppercase tracking-widest text-gold">Baltimore location only</p>
-          <h2 className="display mx-auto mt-4 max-w-4xl text-5xl sm:text-6xl">
-            Reserve your seat for an <span className="text-gradient">authentic Jamaican experience</span>
-          </h2>
-          <div className="mt-8"><ButtonLink href={site.openTable} external>Reserve with OpenTable</ButtonLink></div>
-        </Container>
-      </section>
+      <Reserve />
 
       {/* FAQ */}
-      <section className="py-24">
+      <section className="bg-gradient-to-b from-[#1c5a24] via-[#0b2410] to-black py-20">
         <Container>
-          <Heading top="Frequently Asked" accent="Questions" className="mb-10" />
+          <h2 className="display text-5xl sm:text-6xl">Frequently Asked Questions</h2>
+          <p className="mb-10 mt-3 text-lg text-white/85">Join us for authentic Jamaican flavors and an atmosphere you won&apos;t forget.</p>
           <Faq />
-          <p className="mt-8 text-white/70">
-            Still have a question? <Link href="/contact" className="font-semibold text-gold underline">Get in touch</Link>.
-          </p>
         </Container>
       </section>
     </>
