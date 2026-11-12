@@ -226,23 +226,23 @@ export function LocationGrid() {
   );
 }
 
-export function Faq() {
+export function Faq({ items = faqs }: { items?: { q: string; a: string }[] } = {}) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+    mainEntity: items.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
   };
   return (
     <>
       {/* two columns like the live site: 1–5 left, 6–10 right */}
       <div className="grid gap-x-10 lg:grid-cols-2">
-        {[faqs.slice(0, Math.ceil(faqs.length / 2)), faqs.slice(Math.ceil(faqs.length / 2))].map((col, c) => (
+        {[items.slice(0, Math.ceil(items.length / 2)), items.slice(Math.ceil(items.length / 2))].map((col, c) => (
           <div key={c}>
             {col.map((f, i) => (
               <details key={f.q} className="group border-b border-white/15">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 [&::-webkit-details-marker]:hidden">
                   <span className="display text-xl leading-tight transition-colors group-hover:text-gold group-open:text-gold sm:text-2xl">
-                    {c * Math.ceil(faqs.length / 2) + i + 1}. {f.q}
+                    {c * Math.ceil(items.length / 2) + i + 1}. {f.q}
                   </span>
                   <span
                     aria-hidden
