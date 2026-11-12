@@ -2,10 +2,10 @@ import Image from "next/image";
 import { images, site } from "@/data/site";
 
 /** Full-width photo banner with the OpenTable reservation link (Baltimore only). */
-export function Reserve() {
+export function Reserve({ image = images.tacos, cta = "Get Reservation With Open Table" }: { image?: string; cta?: string } = {}) {
   return (
     <section className="relative isolate overflow-hidden py-28 text-center sm:py-36">
-      <Image src={images.tacos} alt="" fill sizes="100vw" className="-z-20 object-cover" />
+      <Image src={image} alt="" fill sizes="100vw" className="-z-20 object-cover" />
       <div aria-hidden className="absolute inset-0 -z-10 bg-black/60" />
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
         <p className="inline-flex items-center gap-2 rounded-full bg-black/40 px-5 py-2 font-semibold text-white backdrop-blur-sm">
@@ -26,7 +26,7 @@ export function Reserve() {
           rel="noopener noreferrer"
           className="btn-primary mt-8 rounded-[4px] px-6 py-3 font-semibold shadow-none"
         >
-          Get Reservation With Open Table
+          {cta}
         </a>
       </div>
     </section>
