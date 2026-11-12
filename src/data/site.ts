@@ -145,7 +145,19 @@ export const locations: Location[] = [
     image: images.wings,
     timeZone: "America/Detroit",
     hours: ["12:00 PM – 6:00 PM", null, "12:00 PM – 9:00 PM", "12:00 PM – 9:00 PM", "12:00 PM – 9:00 PM", "12:00 PM – 11:00 PM", "12:00 PM – 11:00 PM"],
-    order: { pickup: pickupAll.filter((o) => o.platform !== "toast"), delivery: deliveryAll },
+    // Store pages taken from the live site's Order Now popup (Jerkatnite Detroit, 19163 Livernois Ave).
+    order: {
+      pickup: [
+        { platform: "doordash", href: "https://order.online/store/jerkatnite-detroit-detroit-32158157/?pickup=true" },
+        { platform: "ubereats", href: "https://www.ubereats.com/store/jerk-at-nite/ik__cPG1VTyFGwPeqjQOLw?diningMode=PICKUP" },
+        { platform: "toast", href: "#" },
+        { platform: "direct", href: "#" },
+      ],
+      delivery: [
+        { platform: "doordash", href: "https://order.online/store/jerkatnite-detroit-detroit-32158157/" },
+        { platform: "ubereats", href: "https://www.ubereats.com/store/jerk-at-nite/ik__cPG1VTyFGwPeqjQOLw?diningMode=DELIVERY" },
+      ],
+    },
   },
 ];
 
