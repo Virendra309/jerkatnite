@@ -40,16 +40,20 @@ function Card({ text, hidden }: { text: string; hidden?: boolean }) {
 }
 
 /** Continuously sliding review cards (pauses on hover). */
-export function ReviewsMarquee() {
+export function ReviewsMarquee({ heading }: { heading?: React.ReactNode } = {}) {
   // repeat so the row is always wider than the screen, then double it for a seamless loop
   const base = [...reviews, ...reviews];
   return (
     <section className="bg-black py-20">
       <div className="mx-auto max-w-4xl px-4 text-center">
         <h2 className="display text-4xl sm:text-6xl">
-          What People Are Saying About
-          <br />
-          Jerk at Nite <span aria-hidden>👀</span>
+          {heading ?? (
+            <>
+              What People Are Saying About
+              <br />
+              Jerk at Nite <span aria-hidden>👀</span>
+            </>
+          )}
         </h2>
         <p className="mx-auto mt-4 max-w-3xl text-lg text-white/80">
           From bold jerk flavors to unforgettable late-night vibes, our guests love the authentic taste and vibrant atmosphere we bring to every plate.

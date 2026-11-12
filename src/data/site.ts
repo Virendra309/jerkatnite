@@ -60,6 +60,8 @@ export type Location = {
   hours: WeekHours | null;
   /** Short name shown in the Order Now popup, e.g. "Baltimore". */
   short: string;
+  /** Phone number as shown on the live site (catering cards). */
+  phone?: string;
   /** IANA time zone the hours are in, used for the live "Open now" badge. */
   timeZone: string;
   /** Background photo for the location card. */
@@ -92,6 +94,7 @@ export const locations: Location[] = [
     address: "21 N Eutaw St, Baltimore, MD 21201",
     mapsQuery: "21 N Eutaw St, Baltimore, MD 21201",
     short: "Baltimore",
+    phone: "+1 (443) 835 1398",
     image: images.catering1,
     timeZone: "America/New_York",
     hq: true,
@@ -142,6 +145,7 @@ export const locations: Location[] = [
     address: "19163 Livernois Ave, Detroit, MI 48221",
     mapsQuery: "19163 Livernois Ave, Detroit, MI 48221",
     short: "Detroit",
+    phone: "+1 (313) 739-6021",
     image: images.wings,
     timeZone: "America/Detroit",
     hours: ["12:00 PM – 6:00 PM", null, "12:00 PM – 9:00 PM", "12:00 PM – 9:00 PM", "12:00 PM – 9:00 PM", "12:00 PM – 11:00 PM", "12:00 PM – 11:00 PM"],
