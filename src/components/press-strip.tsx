@@ -14,15 +14,17 @@ function Row({ logos, reverse = false, duration = 40 }: { logos: Logo[]; reverse
           <li key={`${p.name}-${i}`} aria-hidden={i >= logos.length} className="pr-3 sm:pr-5">
             <div
               title={p.name}
-              className="group relative grid h-20 w-40 place-items-center sm:h-24 sm:w-52 overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.07] to-white/[0.02] px-7 backdrop-blur-sm transition duration-500 hover:-translate-y-1 hover:border-leaf/60 hover:shadow-[0_10px_40px_-10px_rgba(52,168,83,0.45)]"
+              className={`group relative grid h-20 w-40 place-items-center overflow-hidden rounded-2xl border px-6 shadow-lg shadow-black/30 transition duration-500 hover:-translate-y-1 hover:border-gold hover:shadow-[0_12px_40px_-10px_rgba(255,215,0,0.45)] sm:h-24 sm:w-52 sm:px-7 ${
+                "light" in p && p.light ? "border-white bg-white" : "border-white/15 bg-gradient-to-br from-[#1f3d24] to-[#0b170d]"
+              }`}
             >
-              {/* soft gold/green glow that fades in on hover */}
-              <span aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(255,215,0,0.18),transparent_60%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+              {/* soft green glow that fades in on hover */}
+              <span aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(52,168,83,0.12),transparent_65%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
               {/* eslint-disable-next-line @next/next/no-img-element -- mixed SVG/PNG/WebP logos, small and already optimized */}
               <img
                 src={p.logo}
                 alt={i < logos.length ? p.name : ""}
-                className="relative max-h-10 w-auto sm:max-h-12 max-w-full object-contain opacity-70 brightness-0 invert transition duration-500 group-hover:scale-105 group-hover:opacity-100 group-hover:brightness-100 group-hover:invert-0"
+                className="relative max-h-10 w-auto max-w-full object-contain transition duration-500 group-hover:scale-110 sm:max-h-12"
               />
             </div>
           </li>

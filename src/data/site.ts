@@ -151,16 +151,16 @@ export const locations: Location[] = [
 
 export const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-/** Media logos for the "As Featured or Seen In" strip (from the live site). */
+/** Media logos for the "As Featured or Seen In" strip (from the live site). `light` = dark logo that needs a white card. */
 export const press = [
   { name: "WUSA9 (CBS Washington DC)", logo: `${up}/2026/05/WUSA9-CBS-Washington-DC.png` },
   { name: "NBC4 Washington", logo: `${up}/2026/05/NBC4-Washington-WRC.webp` },
   { name: "FOX 45 Baltimore", logo: `${up}/2026/05/Fox-45-Baltimore-WBFF.svg` },
   { name: "FOX 5 Washington DC", logo: `${up}/2026/05/Fox-5-Washington-DC.svg` },
-  { name: "Baltimore Times", logo: `${up}/2026/05/Baltimore-Times.png` },
+  { name: "Baltimore Times", logo: `${up}/2026/05/Baltimore-Times.png` , light: true },
   { name: "AfroTech", logo: `${up}/2026/05/AfroTech.svg` },
   { name: "Baltimore Fishbowl", logo: `${up}/2026/05/Baltimore_Fishbowl-removebg-preview.png` },
-  { name: "South Baltimore", logo: `${up}/2026/05/South_Baltimore-removebg-preview.png` },
+  { name: "South Baltimore", logo: `${up}/2026/05/South_Baltimore-removebg-preview.png` , light: true },
 ];
 
 export const reviews = [
