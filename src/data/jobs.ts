@@ -38,12 +38,12 @@ export const jobs: Job[] = [
     type: "Full Time | Part Time",
     location: allLocations,
     duties: [
-      "Greet guests warmly and guide them through the menu",
-      "Take orders accurately and answer questions about dishes and spice levels",
-      "Serve food and drinks promptly and check in throughout the meal",
-      "Work closely with the kitchen and host team to keep service smooth",
-      "Handle payments and close out checks correctly",
-      "Keep tables and the dining room clean and ready for the next guest",
+      "Take food and drink orders accurately and clearly",
+      "Bring food and drinks to the table in a timely manner",
+      "Know the full Jerk at Nite menu and make confident recommendations",
+      "Check on guests throughout their meal and resolve any issues quickly",
+      "Process payments and thank guests sincerely as they leave",
+      "Keep the dining area clean and ready between seatings",
     ],
   },
   {
