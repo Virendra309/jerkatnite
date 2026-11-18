@@ -49,33 +49,71 @@ function Avatar() {
 
 const VISIBLE_MAX = 3; // cards on screen at the widest breakpoint (clones needed for a seamless loop)
 
-/** Auto-sliding row of post cards: moves one card every 3s, loops forever, pauses on hover, swipe on touch. */
+/**
+ * Auto-sliding row of post cards: moves one card every 3s and loops forever.
+ * Grab it with the mouse (or swipe on touch) and the row follows the cursor; let go to snap to the nearest card.
+ */
 function ReelsSlider() {
   const count = posts.length;
   const [pos, setPos] = useState(0);
   const [animate, setAnimate] = useState(true);
-  const [paused, setPaused] = useState(false);
-  const touchX = useRef<number | null>(null);
+  const [hover, setHover] = useState(false);
+  const [drag, setDrag] = useState<number | null>(null); // px offset while dragging
+  const start = useRef<{ x: number; y: number; id: number; horizontal: boolean | null } | null>(null);
+  const moved = useRef(false);
+  const listRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
-    if (paused) return;
+    if (hover || drag !== null) return;
     const id = window.setInterval(() => {
       setAnimate(true);
       setPos((p) => Math.min(p + 1, count));
     }, 3000);
     return () => window.clearInterval(id);
-  }, [paused, count]);
+  }, [hover, drag, count]);
 
-  const step = (d: number) => {
-    if (d < 0 && pos === 0) {
-      // jump to the clone of the first card at the end, then slide back one
-      setAnimate(false);
-      setPos(count);
-      requestAnimationFrame(() => requestAnimationFrame(() => (setAnimate(true), setPos(count - 1))));
-    } else {
-      setAnimate(true);
-      setPos((p) => Math.min(p + d, count));
+  const cardWidth = () => (listRef.current?.firstElementChild as HTMLElement | null)?.offsetWidth ?? 1;
+
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    start.current = { x: e.clientX, y: e.clientY, id: e.pointerId, horizontal: e.pointerType === "mouse" ? true : null };
+    moved.current = false;
+  };
+
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const st = start.current;
+    if (!st || st.id !== e.pointerId) return;
+    const dx = e.clientX - st.x;
+    const dy = e.clientY - st.y;
+    if (st.horizontal === null) {
+      // on touch, decide once whether this is a sideways swipe or a page scroll
+      if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+      st.horizontal = Math.abs(dx) > Math.abs(dy);
+      if (!st.horizontal) {
+        start.current = null;
+        return;
+      }
     }
+    if (!moved.current) {
+      if (Math.abs(dx) < 4) return;
+      moved.current = true;
+      e.currentTarget.setPointerCapture(e.pointerId);
+      setAnimate(false);
+      // dragging back from the first card: swap to its identical twin at the end so there is a card to pull in
+      if (dx > 0 && pos === 0) setPos(count);
+      if (dx < 0 && pos === count) setPos(0);
+    }
+    setDrag(dx);
+  };
+
+  const onPointerUp = () => {
+    const dx = drag ?? 0;
+    start.current = null;
+    setDrag(null);
+    setAnimate(true);
+    if (!moved.current) return;
+    const n = Math.abs(dx) > 40 ? Math.max(1, Math.round(Math.abs(dx) / cardWidth())) : 0;
+    setPos((p) => (dx < 0 ? Math.min(p + n, count) : Math.max(p - n, 0)));
   };
 
   const slides = [...posts, ...posts.slice(0, VISIBLE_MAX)];
@@ -85,27 +123,31 @@ function ReelsSlider() {
       role="region"
       aria-roledescription="carousel"
       aria-label="Jerk at Nite on Instagram"
-      className="mt-12 overflow-hidden text-left [--card:85%] sm:[--card:50%] lg:[--card:33.3333%]"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onTouchStart={(e) => {
-        touchX.current = e.touches[0].clientX;
-        setPaused(true);
-      }}
-      onTouchEnd={(e) => {
-        if (touchX.current !== null) {
-          const dx = e.changedTouches[0].clientX - touchX.current;
-          if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1);
+      className={`mt-12 touch-pan-y select-none overflow-hidden text-left [--card:85%] sm:[--card:50%] lg:[--card:33.3333%] ${
+        drag !== null ? "cursor-grabbing" : "cursor-grab"
+      }`}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
+      onClickCapture={(e) => {
+        // a drag shouldn't open the Instagram link
+        if (moved.current) {
+          e.preventDefault();
+          e.stopPropagation();
+          moved.current = false;
         }
-        touchX.current = null;
-        setPaused(false);
       }}
     >
       <ul
+        ref={listRef}
         className={`flex ${animate ? "transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]" : ""}`}
-        style={{ transform: `translateX(calc(var(--card) * -${pos}))` }}
+        style={{ transform: `translateX(calc(var(--card) * -${pos} + ${drag ?? 0}px))` }}
         onTransitionEnd={(e) => {
-          if (e.target === e.currentTarget && pos === count) {
+          if (e.target !== e.currentTarget) return;
+          if (pos === count) {
             setAnimate(false);
             setPos(0);
           }
@@ -120,6 +162,7 @@ function ReelsSlider() {
                 target="_blank"
                 rel="noopener noreferrer"
                 tabIndex={clone ? -1 : undefined}
+                draggable={false}
                 aria-label={`View on Instagram: ${p.caption}`}
                 className="group block h-full overflow-hidden rounded-lg border border-white/10 bg-[#262626] transition-colors duration-300 hover:border-leaf/60"
               >
@@ -134,6 +177,7 @@ function ReelsSlider() {
                   <Image
                     src={p.img}
                     alt={clone ? "" : p.alt}
+                    draggable={false}
                     fill
                     sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 85vw"
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
