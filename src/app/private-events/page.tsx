@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { EventCard } from "@/components/event-card";
 import { BookingForm } from "@/components/booking-form";
 import { Container, Faq } from "@/components/ui";
 import { images } from "@/data/site";
@@ -123,26 +124,7 @@ export default function PrivateEventsPage() {
       <section className="bg-black pb-20 pt-6">
         <Container className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {categories.map((c) => (
-            <article
-              key={c.title}
-              className="group flex flex-col rounded-xl border border-white/15 bg-gradient-to-b from-[#1e1e1e] to-black p-2 transition duration-300 hover:-translate-y-1 hover:border-leaf/60"
-            >
-              <div className="relative aspect-[16/7.5] overflow-hidden rounded-lg">
-                <Image src={c.img} alt={c.title} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
-              </div>
-              <div className="px-1 pb-4 pt-4">
-                <h2 className="display text-2xl">{c.title}</h2>
-                <p className="mt-2 text-white/90">{c.text}</p>
-                <ul className="mt-4 space-y-2.5">
-                  {c.items.map((i) => (
-                    <li key={i} className="flex items-center gap-3 text-[15px] text-[#b7e04a]">
-                      <span aria-hidden className="size-2 shrink-0 rounded-full border-2 border-gold" />
-                      {i}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </article>
+            <EventCard key={c.title} c={c} />
           ))}
         </Container>
       </section>

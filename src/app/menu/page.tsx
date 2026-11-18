@@ -30,14 +30,14 @@ export default function MenuPage() {
             A menu crafted to leave a lasting impression. Packed with bold flavors, signature Jamaican jerk specialties, and rich
             Caribbean spices. Every dish is made to be memorable, satisfying, and worth coming back for.
           </p>
-          <OrderButton className="mt-8 rounded-[4px] px-5 py-2.5 font-semibold shadow-none">Order Online Now</OrderButton>
+          <OrderButton className="mt-8 w-full rounded-[4px] px-5 py-2.5 font-semibold shadow-none sm:w-auto">Order Online Now</OrderButton>
         </Container>
       </section>
 
       {/* Menu */}
       <section className="bg-black py-16">
         <Container>
-          <h2 className="display mb-6 text-4xl sm:text-5xl">Explore Our Jamaican Caribbean Menu</h2>
+          <h2 className="display mb-6 text-center text-4xl sm:text-left sm:text-5xl">Explore Our Jamaican Caribbean Menu</h2>
           <MenuTabs tabs={menu} />
           <div className="mt-12 text-center">
             <OrderButton className="rounded-[4px] px-5 py-2.5 font-semibold shadow-none">Order Online Now</OrderButton>

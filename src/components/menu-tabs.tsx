@@ -30,9 +30,9 @@ function MenuCard({ item, index }: { item: MenuItem; index: number }) {
   return (
     <article
       style={{ animationDelay: `${Math.min(index, 8) * 60}ms` }}
-      className="animate-fade-up group flex flex-col rounded-2xl border border-white/10 bg-gradient-to-b from-[#0c2410] to-[#24562b] p-2 shadow-lg shadow-black/30 transition duration-300 hover:-translate-y-1.5 hover:border-leaf/60 hover:shadow-leaf/10"
+      className="animate-fade-up group grid grid-cols-[38%_1fr] gap-x-3 rounded-2xl sm:flex sm:flex-col border border-white/10 bg-gradient-to-b from-[#0c2410] to-[#24562b] p-2 shadow-lg shadow-black/30 transition duration-300 hover:-translate-y-1.5 hover:border-leaf/60 hover:shadow-leaf/10"
     >
-      <div className="relative aspect-[16/10] overflow-hidden rounded-xl">
+      <div className="relative aspect-square overflow-hidden rounded-xl sm:aspect-[16/10]">
         <Image
           src={item.image}
           alt={item.name}
@@ -41,14 +41,14 @@ function MenuCard({ item, index }: { item: MenuItem; index: number }) {
           className="object-cover transition duration-700 ease-out group-hover:scale-110"
         />
         <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-        <span className="absolute left-2 top-2 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-leaf backdrop-blur-sm">
+        <span className="absolute left-2 top-2 hidden rounded-full sm:inline bg-black/60 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-leaf backdrop-blur-sm">
           100% Halal
         </span>
       </div>
 
-      <div className="flex flex-1 flex-col px-2 pb-2 pt-4">
-        <h3 className="display text-2xl leading-tight">{item.name}</h3>
-        <p className="mt-2 text-sm leading-relaxed text-white/85">{item.description}</p>
+      <div className="flex min-w-0 flex-1 flex-col pb-1 pr-1 pt-1 sm:px-2 sm:pb-2 sm:pt-4">
+        <h3 className="display text-xl leading-tight sm:text-2xl">{item.name}</h3>
+        <p className="mt-1.5 text-[13px] leading-snug text-white/85 sm:mt-2 sm:text-sm sm:leading-relaxed">{item.description}</p>
 
         {hasOptions && (
           <>
@@ -57,7 +57,7 @@ function MenuCard({ item, index }: { item: MenuItem; index: number }) {
               aria-expanded={expanded}
               aria-controls={optsId}
               onClick={() => setExpanded((v) => !v)}
-              className="mt-4 flex items-center justify-between text-left font-medium text-white transition-colors hover:text-gold"
+              className="mt-3 flex items-center justify-between text-left text-sm font-medium text-white transition-colors hover:text-gold sm:mt-4 sm:text-base"
             >
               {expanded ? "View less" : "View More"}
               <Chevron open={expanded} />
@@ -115,7 +115,7 @@ export function MenuTabs({ tabs }: { tabs: MenuTab[] }) {
   return (
     <div>
       {/* Category tabs (static, does not stick or slide) */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="flex flex-wrap items-center justify-center gap-4 sm:justify-between">
         {/* gradient border: gold → green */}
         <div className="max-w-full rounded-full bg-gradient-to-r from-gold via-[#1d4a22] to-leaf p-px">
           <div
@@ -132,7 +132,7 @@ export function MenuTabs({ tabs }: { tabs: MenuTab[] }) {
               aria-selected={active === i}
               aria-controls="menu-panel"
               onClick={() => setActive(i)}
-              className={`shrink-0 rounded-full px-6 py-3 text-base font-semibold transition-colors duration-200 sm:min-w-[180px] sm:px-8 sm:text-lg ${
+              className={`shrink-0 rounded-full px-5 py-2.5 text-base font-semibold transition-colors duration-200 sm:min-w-[180px] sm:px-8 sm:text-lg ${
                 active === i ? "bg-[#FFD700] text-black" : "text-white hover:text-gold"
               }`}
             >
