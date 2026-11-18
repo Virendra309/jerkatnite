@@ -85,11 +85,12 @@ export const jobs: Job[] = [
     type: "Full Time | Part Time | Weekends",
     location: allLocations,
     duties: [
-      "Set up and break down the food truck before and after events",
-      "Take orders and serve guests quickly at the window",
-      "Help prepare and plate food during service",
-      "Keep the truck stocked, clean and up to health code standards",
-      "Represent Jerk at Nite with great energy at every event",
+      "Set up and break down the food truck before and after each shift",
+      "Take customer orders accurately and handle payments",
+      "Serve food and drinks quickly and with great energy",
+      "Keep the truck clean and organized during service",
+      "Restock supplies and communicate low inventory to the manager",
+      "Represent Jerk at Nite with a positive attitude at every event",
     ],
   },
 ];
