@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { ApplyButton } from "@/components/apply-button";
+import { ApplicationForm } from "@/components/application-form";
 import { Container } from "@/components/ui";
 import { jobs } from "@/data/jobs";
 import { locations } from "@/data/site";
@@ -19,7 +19,8 @@ export async function generateMetadata({ params }: PageProps<"/careers/[slug]">)
 }
 
 type Params = PageProps<"/careers/[slug]">["params"];
-const applyLocations = locations.map((l) => (l.comingSoon ? `${l.city} (coming soon)` : l.city));
+const applyLocations = locations.map((l) => l.city);
+const roles = jobs.map((j) => j.title);
 
 async function JobDetails({ params }: { params: Params }) {
   const { slug } = await params;
@@ -54,18 +55,8 @@ async function JobDetails({ params }: { params: Params }) {
             ))}
           </ul>
           <p className="mt-8 text-lg italic text-white/90">Available at: {job.location}</p>
-          <dl className="mt-4 flex flex-wrap gap-x-10 gap-y-2 text-white/85">
-            <div className="flex gap-2">
-              <dt className="font-semibold text-white">Experience:</dt>
-              <dd>{job.experience}</dd>
-            </div>
-            <div className="flex gap-2">
-              <dt className="font-semibold text-white">Job Type:</dt>
-              <dd>{job.type}</dd>
-            </div>
-          </dl>
-          <div className="mt-12">
-            <ApplyButton role={job.title} locations={applyLocations} className="px-6 py-3 text-lg" />
+          <div className="mt-16">
+            <ApplicationForm role={job.title} roles={roles} locations={applyLocations} />
           </div>
         </Container>
       </section>
