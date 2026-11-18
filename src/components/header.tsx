@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { images, nav, type NavLink } from "@/data/site";
 import { OrderButton } from "./order";
 
@@ -16,23 +16,6 @@ function Chevron({ className = "" }: { className?: string }) {
   return (
     <svg aria-hidden viewBox="0 0 448 512" className={`size-3.5 fill-current transition-transform duration-300 ${className}`}>
       <path d="M207 381.5 12.7 187.1c-9.4-9.4-9.4-24.6 0-33.9l22.7-22.7c9.4-9.4 24.5-9.4 33.9 0L224 284.5l154.7-154c9.4-9.3 24.5-9.3 33.9 0l22.7 22.7c9.4 9.4 9.4 24.6 0 33.9L241 381.5c-9.4 9.4-24.6 9.4-34 0z" />
-    </svg>
-  );
-}
-
-/** Gradient (gold → green) diagonal arrow used in the dropdowns. */
-function ArrowUpRight() {
-  // Unique per instance: a shared gradient id breaks when the panel that defines it is hidden.
-  const id = useId();
-  return (
-    <svg aria-hidden viewBox="0 0 24 24" fill="none" className="size-5 shrink-0">
-      <defs>
-        <linearGradient id={id} x1="6" y1="18" x2="18" y2="6" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#FFD700" />
-          <stop offset="1" stopColor="#34A853" />
-        </linearGradient>
-      </defs>
-      <path d="M9.4 6H18v8.6M6 18 17.9 6.1" stroke={`url(#${id})`} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -137,19 +120,18 @@ export function Header() {
                   {/* pt-4 bridges the gap so hover isn't lost moving into the panel */}
                   <div
                     id={`menu-${item.label}`}
-                    className={`absolute left-1/2 top-full z-20 w-60 -translate-x-1/2 pt-4 ${expanded ? "block" : "hidden group-hover:block"}`}
+                    className={`absolute left-1/2 top-full z-20 w-52 -translate-x-1/2 pt-4 ${expanded ? "block" : "hidden group-hover:block"}`}
                   >
-                    <ul className="overflow-hidden rounded-lg border border-white/15 bg-gradient-to-br from-[#a3a3a3]/85 via-[#5c5c5c]/85 to-[#262626]/90 shadow-2xl shadow-black/40 backdrop-blur-xl">
+                    <ul className="overflow-hidden rounded-2xl border border-white/15 bg-gradient-to-br from-[#a3a3a3]/85 via-[#5c5c5c]/85 to-[#262626]/90 shadow-2xl shadow-black/40 backdrop-blur-xl">
                       {item.children.map((child) => (
                         <li key={child.href} className="border-b border-white/15 last:border-b-0">
                           <Link
                             href={child.href}
                             onClick={closeAll}
                             aria-current={pathname === child.href ? "page" : undefined}
-                            className="flex items-center justify-between gap-3 px-4 py-3.5 text-sm font-medium text-white transition-colors duration-200 hover:text-gold focus-visible:text-gold aria-[current=page]:text-gold"
+                            className="block px-5 py-4 text-base font-medium text-white transition-colors duration-200 hover:text-gold focus-visible:text-gold aria-[current=page]:text-gold"
                           >
                             {child.label}
-                            <ArrowUpRight />
                           </Link>
                         </li>
                       ))}
