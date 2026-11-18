@@ -3,20 +3,15 @@
 import { useRef, useState, type FormEvent } from "react";
 import { site } from "@/data/site";
 
-export type Job = { title: string; text: string; experience: string; type: string; location: string };
-
-/** Job cards; "Apply Now" opens an application form for that role (sends via the visitor's email app). */
-export function JobList({ jobs, locations }: { jobs: Job[]; locations: string[] }) {
+/** "Apply Now" button that opens the application form for one role (sends via the visitor's email app). */
+export function ApplyButton({ role, locations, className = "" }: { role: string; locations: string[]; className?: string }) {
   const dialog = useRef<HTMLDialogElement>(null);
-  const [role, setRole] = useState<string | null>(null);
   const [sent, setSent] = useState(false);
 
-  const open = (title: string) => {
-    setRole(title);
+  const open = () => {
     setSent(false);
     dialog.current?.showModal();
   };
-
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const d = new FormData(e.currentTarget);
@@ -36,39 +31,9 @@ export function JobList({ jobs, locations }: { jobs: Job[]; locations: string[] 
 
   return (
     <>
-      <ul className="space-y-6">
-        {jobs.map((j) => (
-          <li key={j.title} className="rounded-md border border-white/20 bg-black p-4 transition-colors hover:border-[#c6f135]/60 sm:p-5">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-              <div className="max-w-3xl">
-                <h3 className="display text-2xl">{j.title}</h3>
-                <p className="mt-3 text-white/90">{j.text}</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => open(j.title)}
-                className="btn-primary order-last shrink-0 self-start rounded-[4px] px-4 py-2 font-semibold shadow-none sm:order-none"
-              >
-                Apply Now
-              </button>
-            </div>
-            <dl className="mt-4 grid gap-2 text-sm sm:grid-cols-[minmax(0,11rem)_minmax(0,10rem)_1fr] sm:gap-6">
-              <div className="flex gap-2">
-                <dt className="font-semibold">Experience:</dt>
-                <dd className="text-white/85">{j.experience}</dd>
-              </div>
-              <div className="flex gap-2">
-                <dt className="shrink-0 font-semibold">Job Type:</dt>
-                <dd className="text-white/85">{j.type}</dd>
-              </div>
-              <div className="flex gap-2">
-                <dt className="font-semibold">Location:</dt>
-                <dd className="text-white/85">{j.location}</dd>
-              </div>
-            </dl>
-          </li>
-        ))}
-      </ul>
+      <button type="button" onClick={open} className={`btn-primary rounded-md font-semibold shadow-none ${className}`}>
+        Apply Now
+      </button>
 
       <dialog
         ref={dialog}

@@ -1,54 +1,13 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { JobList, type Job } from "@/components/job-list";
 import { Container } from "@/components/ui";
-import { locations } from "@/data/site";
+import { jobs } from "@/data/jobs";
 
 export const metadata: Metadata = {
   title: "Careers",
   description: "Join the Jerk at Nite family. Open roles: Kitchen Manager, Server, Hostess, Host and Food Truck Support.",
 };
-
-const allLocations = "Baltimore MD, Washington DC, Houston TX & Detroit MI";
-
-const jobs: Job[] = [
-  {
-    title: "Kitchen Manager",
-    text: "The Kitchen Manager runs the kitchen during service. They make sure every dish meets Jerk at Nite's standard of bold, fresh, consistent food.",
-    experience: "5+ Years",
-    type: "Full Time",
-    location: allLocations,
-  },
-  {
-    title: "Server",
-    text: "Servers take care of guests from the moment they sit down to the moment they leave. They know the Jerk at Nite menu inside and out.",
-    experience: "5+ Years",
-    type: "Full Time | Part Time",
-    location: allLocations,
-  },
-  {
-    title: "Hostess",
-    text: "Same role as Host. The Hostess is the face of Jerk at Nite and creates a great first impression for every single guest who walks in.",
-    experience: "5+ Years",
-    type: "Full Time",
-    location: allLocations,
-  },
-  {
-    title: "Host",
-    text: "The Host is the first person guests see when they walk in. They set the tone for the whole dining experience and make sure every guest feels welcome.",
-    experience: "5+ Years",
-    type: "Full Time | Part Time",
-    location: allLocations,
-  },
-  {
-    title: "Food Truck Support",
-    text: "Food Truck Support staff keep the Jerk at Nite food trucks running smoothly. They work directly on the truck during events and service hours.",
-    experience: "5+ Years",
-    type: "Full Time | Part Time | Weekends",
-    location: allLocations,
-  },
-];
 
 export default function CareersPage() {
   return (
@@ -88,7 +47,43 @@ export default function CareersPage() {
           <h2 className="display mb-8 text-center text-5xl sm:text-6xl">
             Explore <span className="text-gradient">Jerk at Nite Jobs</span>
           </h2>
-          <JobList jobs={jobs} locations={locations.map((l) => (l.comingSoon ? `${l.city} (coming soon)` : l.city))} />
+          <ul className="space-y-6">
+            {jobs.map((j) => (
+              <li key={j.slug} className="rounded-lg border border-[#1f4d26] bg-black p-5 transition-colors hover:border-[#5ee26f]/70 sm:p-6">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="max-w-3xl">
+                    <h3 className="display text-2xl normal-case">
+                      <Link href={`/careers/${j.slug}`} className="hover:text-gold">
+                        {j.title}
+                      </Link>
+                    </h3>
+                    <p className="mt-4 text-lg text-white/90">{j.text}</p>
+                  </div>
+                  <Link
+                    href={`/careers/${j.slug}`}
+                    aria-label={`Apply Now: ${j.title}`}
+                    className="btn-primary order-last shrink-0 self-start rounded-md px-6 py-3 text-lg font-semibold shadow-none sm:order-none"
+                  >
+                    Apply Now
+                  </Link>
+                </div>
+                <dl className="mt-4 grid gap-2 sm:grid-cols-[minmax(0,12rem)_minmax(0,14rem)_1fr] sm:gap-6">
+                  <div className="flex gap-2">
+                    <dt className="font-semibold">Experience:</dt>
+                    <dd className="text-white/85">{j.experience}</dd>
+                  </div>
+                  <div className="flex gap-2">
+                    <dt className="shrink-0 font-semibold">Job Type:</dt>
+                    <dd className="text-white/85">{j.type}</dd>
+                  </div>
+                  <div className="flex gap-2">
+                    <dt className="font-semibold">Location:</dt>
+                    <dd className="text-white/85">{j.location}</dd>
+                  </div>
+                </dl>
+              </li>
+            ))}
+          </ul>
         </Container>
       </section>
     </>

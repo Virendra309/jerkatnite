@@ -1,0 +1,94 @@
+// Open roles shown on /careers and /careers/[slug].
+export type Job = {
+  slug: string;
+  title: string;
+  text: string;
+  experience: string;
+  type: string;
+  location: string;
+  /** "What this person does" list on the job page. */
+  duties: string[];
+};
+
+const allLocations = "Baltimore MD, Washington DC, Houston TX & Detroit MI";
+
+export const jobs: Job[] = [
+  {
+    slug: "kitchen-manager",
+    title: "Kitchen Manager",
+    text: "The Kitchen Manager runs the kitchen during service. They make sure every dish meets Jerk at Nite's standard of bold, fresh, consistent food.",
+    experience: "5+ Years",
+    type: "Full Time",
+    location: allLocations,
+    duties: [
+      "Oversee all kitchen staff and manage the line during service",
+      "Make sure every dish is prepared correctly and on time",
+      "Train new kitchen team members on recipes and procedures",
+      "Monitor food inventory and place orders before supplies run low",
+      "Keep the kitchen clean, organized, and up to health code standards",
+      "Work with the General Manager to improve kitchen operations",
+      "Handle any kitchen issues quickly and professionally during service",
+    ],
+  },
+  {
+    slug: "server",
+    title: "Server",
+    text: "Servers take care of guests from the moment they sit down to the moment they leave. They know the Jerk at Nite menu inside and out.",
+    experience: "5+ Years",
+    type: "Full Time | Part Time",
+    location: allLocations,
+    duties: [
+      "Greet guests warmly and guide them through the menu",
+      "Take orders accurately and answer questions about dishes and spice levels",
+      "Serve food and drinks promptly and check in throughout the meal",
+      "Work closely with the kitchen and host team to keep service smooth",
+      "Handle payments and close out checks correctly",
+      "Keep tables and the dining room clean and ready for the next guest",
+    ],
+  },
+  {
+    slug: "hostess",
+    title: "Hostess",
+    text: "Same role as Host. The Hostess is the face of Jerk at Nite and creates a great first impression for every single guest who walks in.",
+    experience: "5+ Years",
+    type: "Full Time",
+    location: allLocations,
+    duties: [
+      "Welcome every guest with energy and a smile",
+      "Manage reservations, the waitlist and seating",
+      "Keep the flow of the dining room balanced between servers",
+      "Answer phone calls and questions about hours, menu and events",
+      "Keep the entrance and host stand clean and organized",
+    ],
+  },
+  {
+    slug: "host",
+    title: "Host",
+    text: "The Host is the first person guests see when they walk in. They set the tone for the whole dining experience and make sure every guest feels welcome.",
+    experience: "5+ Years",
+    type: "Full Time | Part Time",
+    location: allLocations,
+    duties: [
+      "Greet guests at the door and make them feel welcome",
+      "Manage reservations, the waitlist and seating",
+      "Communicate wait times clearly and keep guests updated",
+      "Work with servers to keep tables turning smoothly",
+      "Answer phone calls and help with pickup orders",
+    ],
+  },
+  {
+    slug: "food-truck-support",
+    title: "Food Truck Support",
+    text: "Food Truck Support staff keep the Jerk at Nite food trucks running smoothly. They work directly on the truck during events and service hours.",
+    experience: "5+ Years",
+    type: "Full Time | Part Time | Weekends",
+    location: allLocations,
+    duties: [
+      "Set up and break down the food truck before and after events",
+      "Take orders and serve guests quickly at the window",
+      "Help prepare and plate food during service",
+      "Keep the truck stocked, clean and up to health code standards",
+      "Represent Jerk at Nite with great energy at every event",
+    ],
+  },
+];
