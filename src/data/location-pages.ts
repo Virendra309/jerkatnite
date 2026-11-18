@@ -124,6 +124,7 @@ export const locationPages: Record<string, LocationPage> = {
     intro:
       "Looking for the best Jamaican restaurant in Detroit, MI? Jerk at Nite is right at {address} on the historic Avenue of Fashion near the University of Detroit Mercy. Dine in or order bold jerk chicken, slow-braised oxtail and rasta pasta made fresh daily at our Detroit location. Halal, no MSG.",
     arrival: {
+      image: "/images/locations/detroit-storefront.jpg",
       parkingTitle: "Parking Near Us",
       parking:
         "Free parking is available along Livernois Ave and on nearby side streets. The location sits on Detroit's Avenue of Fashion, a well-known commercial corridor that is easy to access by car.",
