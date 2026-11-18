@@ -146,30 +146,36 @@ export function Header() {
         <div className="flex items-center gap-3">
           <OrderButton className="whitespace-nowrap rounded-[4px] px-3 py-2 text-sm font-semibold shadow-none hover:shadow-none sm:px-5 sm:py-2.5 sm:text-base" />
           <button
-            className="rounded-lg p-2 lg:hidden"
+            className={`grid size-10 place-items-center rounded-[4px] transition-colors lg:hidden ${open ? "bg-white text-black" : "text-white"}`}
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             aria-controls="mobile-nav"
             onClick={() => setOpen((v) => !v)}
           >
-            <span className="block h-0.5 w-6 bg-white transition" style={{ transform: open ? "translateY(8px) rotate(45deg)" : "none" }} />
-            <span className="mt-1.5 block h-0.5 w-6 bg-white transition" style={{ opacity: open ? 0 : 1 }} />
-            <span className="mt-1.5 block h-0.5 w-6 bg-white transition" style={{ transform: open ? "translateY(-8px) rotate(-45deg)" : "none" }} />
+            {open ? (
+              <svg viewBox="0 0 24 24" className="size-7" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden>
+                <path d="M6 6l12 12M18 6 6 18" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" className="size-7" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden>
+                <path d="M3 6h18M3 12h18M3 18h18" />
+              </svg>
+            )}
           </button>
         </div>
       </div>
 
       {/* Mobile menu */}
       {open && (
-        <nav id="mobile-nav" aria-label="Mobile" className="max-h-[calc(100vh-5rem)] overflow-y-auto border-t border-white/10 px-4 pb-6 lg:hidden">
-          <ul className="grid gap-1 pt-3">
+        <nav id="mobile-nav" aria-label="Mobile" className="absolute inset-x-0 top-full max-h-[calc(100vh-5rem)] overflow-y-auto bg-black/55 pb-4 backdrop-blur-md lg:hidden">
+          <ul className="grid">
             {nav.map((item) => {
               const active = isActive(pathname, item);
               const expanded = dropdown === item.label;
               return (
                 <li key={item.href}>
-                  <div className={`flex items-center justify-between rounded-full ${active ? "bg-white text-black" : "text-white"}`}>
-                    <Link href={item.href} onClick={closeAll} className="flex-1 px-5 py-3 text-lg font-medium">
+                  <div className="flex items-center text-white" data-active={active || undefined}>
+                    <Link href={item.href} onClick={closeAll} className="px-1 py-2 text-[17px] font-medium hover:text-gold">
                       {item.label}
                     </Link>
                     {item.children && (
@@ -178,17 +184,17 @@ export function Header() {
                         aria-label={`${expanded ? "Close" : "Open"} ${item.label} menu`}
                         aria-expanded={expanded}
                         onClick={() => setDropdown(expanded ? null : item.label)}
-                        className="px-5 py-4"
+                        className="px-2 py-3"
                       >
                         <Chevron className={expanded ? "rotate-180" : ""} />
                       </button>
                     )}
                   </div>
                   {item.children && expanded && (
-                    <ul className="mt-1 grid gap-1 pl-4">
+                    <ul className="mb-2 grid gap-0.5 pl-5">
                       {item.children.map((child) => (
                         <li key={child.href}>
-                          <Link href={child.href} onClick={closeAll} className="flex items-center justify-between rounded-xl px-4 py-2.5 text-white/85 hover:bg-white/5">
+                          <Link href={child.href} onClick={closeAll} className="flex max-w-xs items-center justify-between px-2 py-2 text-white/85 hover:text-gold">
                             {child.label}
                             <span aria-hidden className="text-gradient font-bold">↗</span>
                           </Link>
