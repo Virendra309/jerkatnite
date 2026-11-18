@@ -65,7 +65,7 @@ export default function CareersPage() {
                   <Link
                     href={`/careers/${j.slug}`}
                     aria-label={`Apply Now: ${j.title}`}
-                    className="btn-primary order-last shrink-0 self-start rounded-md px-6 py-3 text-lg font-semibold shadow-none sm:order-none"
+                    className="btn-primary hidden shrink-0 self-start rounded-md px-6 py-3 text-lg font-semibold shadow-none sm:inline-flex"
                   >
                     Apply Now
                   </Link>
@@ -84,6 +84,16 @@ export default function CareersPage() {
                     <dd className="text-white/85">{j.location}</dd>
                   </div>
                 </dl>
+                {/* phones: button sits bottom-right under the details, as on the live site */}
+                <div className="mt-4 flex justify-end sm:hidden">
+                  <Link
+                    href={`/careers/${j.slug}`}
+                    aria-label={`Apply Now: ${j.title}`}
+                    className="btn-primary rounded-md px-4 py-2 font-semibold shadow-none"
+                  >
+                    Apply Now
+                  </Link>
+                </div>
               </li>
             ))}
           </ul>
