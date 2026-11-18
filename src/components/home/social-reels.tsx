@@ -53,8 +53,9 @@ const VISIBLE_MAX = 3; // cards on screen at the widest breakpoint (clones neede
  * Auto-sliding row of post cards: moves one card every 3s and loops forever.
  * Grab it with the mouse (or swipe on touch) and the row follows the cursor; let go to snap to the nearest card.
  */
-function ReelsSlider() {
-  const count = posts.length;
+function ReelsSlider({ captions }: { captions?: Record<string, string> }) {
+  const items = posts.map((p) => ({ ...p, caption: captions?.[p.img] ?? p.caption }));
+  const count = items.length;
   const [pos, setPos] = useState(0);
   const [animate, setAnimate] = useState(true);
   const [hover, setHover] = useState(false);
@@ -116,7 +117,7 @@ function ReelsSlider() {
     setPos((p) => (dx < 0 ? Math.min(p + n, count) : Math.max(p - n, 0)));
   };
 
-  const slides = [...posts, ...posts.slice(0, VISIBLE_MAX)];
+  const slides = [...items, ...items.slice(0, VISIBLE_MAX)];
 
   return (
     <div
@@ -196,7 +197,7 @@ function ReelsSlider() {
 }
 
 /** "What people tells about us on social media platforms" — Instagram-style post cards. */
-export function SocialReels({ heading, text }: { heading?: React.ReactNode; text?: string } = {}) {
+export function SocialReels({ heading, text, captions }: { heading?: React.ReactNode; text?: string; captions?: Record<string, string> } = {}) {
   return (
     <section className="bg-gradient-to-b from-[#1c5a24] via-[#0b2410] to-black py-20">
       <div className="mx-auto max-w-6xl px-4 text-center sm:px-6">
@@ -218,7 +219,7 @@ export function SocialReels({ heading, text }: { heading?: React.ReactNode; text
           )}
         </p>
 
-        <ReelsSlider />
+        <ReelsSlider captions={captions} />
       </div>
     </section>
   );

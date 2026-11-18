@@ -17,6 +17,10 @@ export type LocationPage = {
   /** image: photo beside the text (portrait photos get a tall frame). */
   arrival?: { image?: string; portrait?: boolean; parkingTitle?: string; parking: string; gettingHere: string };
   faqs: { q: string; a: string }[];
+  /** Private Events teaser text for this city. */
+  eventsText?: string;
+  /** Social post captions for this city, keyed by image path. */
+  captions?: Record<string, string>;
 };
 
 const halal = { q: "Does Jerk at Nite serve Halal Caribbean food?", a: "Yes. All of our food is 100% Halal, made fresh daily with no MSG." };
@@ -119,6 +123,11 @@ export const locationPages: Record<string, LocationPage> = {
     ],
   },
   "detroit-mi": {
+    eventsText:
+      "From intimate birthday dinners to full-scale corporate mixers, Jerk at Nite Detroit brings bold Caribbean flavor to your next occasion in the Motor City. Great food, great energy, and a vibe Detroit has never tasted before.",
+    captions: {
+      "/images/locations/reel-jamaican-way.jpg": "The Avenue of Fashion just got a new reason to visit. Smoked jerk chicken straight from the source.",
+    },
     title: ["Get Jerked in", "Detroit, MI"],
     accentCity: "at Detroit",
     intro:

@@ -4,7 +4,7 @@ import { Container } from "@/components/ui";
 import { images } from "@/data/site";
 
 /** "Private Events at Jerkatnite" section (home and locations pages). */
-export function PrivateEventsTeaser() {
+export function PrivateEventsTeaser({ text }: { text?: string } = {}) {
   return (
     <section className="relative overflow-hidden bg-black py-24">
       {/* decorative sparkles */}
@@ -40,9 +40,8 @@ export function PrivateEventsTeaser() {
             className="mx-auto mt-8 w-full max-w-lg lg:hidden"
           />
           <p className="mt-6 text-lg leading-relaxed text-white/85">
-            From intimate birthday dinners to full-scale corporate mixers, the Jerk at Nite experience is the perfect setting for your
-            next occasion. Bold Jamaican food, an unforgettable atmosphere, and a team that makes sure every event runs smoothly. A
-            private room is also available for special events.
+            {text ??
+              "From intimate birthday dinners to full-scale corporate mixers, the Jerk at Nite experience is the perfect setting for your next occasion. Bold Jamaican food, an unforgettable atmosphere, and a team that makes sure every event runs smoothly. A private room is also available for special events."}
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link href="/private-events" className="btn-primary rounded-[4px] px-5 py-2.5 font-semibold shadow-none">

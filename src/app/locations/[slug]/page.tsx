@@ -241,7 +241,28 @@ async function Timing({ params }: { params: Params }) {
 
 async function Delivery({ params }: { params: Params }) {
   const { loc } = await resolve(params);
-  return loc.comingSoon ? null : <DeliveryBanner />;
+  return loc.comingSoon ? null : (
+    <DeliveryBanner
+      title={
+        <>
+          Get Jerked Delivered
+          <br />
+          to Your Door
+        </>
+      }
+      text="Order your favorite dishes easily through DoorDash or Uber Eats from your nearest location. Enjoy bold Jamaican flavors delivered straight to your doorstep, fresh and ready to satisfy your cravings."
+    />
+  );
+}
+
+async function Reels({ params }: { params: Params }) {
+  const { page } = await resolve(params);
+  return <SocialReels captions={page?.captions} />;
+}
+
+async function Events({ params }: { params: Params }) {
+  const { page } = await resolve(params);
+  return <PrivateEventsTeaser text={page?.eventsText} />;
 }
 
 async function Reservations({ params }: { params: Params }) {
@@ -282,11 +303,15 @@ export default function LocationPage({ params }: PageProps<"/locations/[slug]">)
         <Timing params={params} />
       </Suspense>
       <CapturedMoments />
-      <SocialReels />
+      <Suspense fallback={<SocialReels />}>
+        <Reels params={params} />
+      </Suspense>
       <Suspense fallback={null}>
         <Delivery params={params} />
       </Suspense>
-      <PrivateEventsTeaser />
+      <Suspense fallback={<PrivateEventsTeaser />}>
+        <Events params={params} />
+      </Suspense>
       <Suspense fallback={null}>
         <Reservations params={params} />
         <LocationFaq params={params} />
