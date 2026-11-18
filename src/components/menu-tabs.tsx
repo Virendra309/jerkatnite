@@ -46,18 +46,21 @@ function MenuCard({ item, index }: { item: MenuItem; index: number }) {
         </span>
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col pb-1 pr-1 pt-1 sm:px-2 sm:pb-2 sm:pt-4">
-        <h3 className="display text-xl leading-tight sm:text-2xl">{item.name}</h3>
-        <p className="mt-1.5 text-[13px] leading-snug text-white/85 sm:mt-2 sm:text-sm sm:leading-relaxed">{item.description}</p>
+      {/* phones: image | name+text side by side, then View More / options / Order across the full card width */}
+      <div className="max-sm:contents sm:flex sm:min-w-0 sm:flex-1 sm:flex-col sm:px-2 sm:pb-2 sm:pt-4">
+        <div className="min-w-0 pr-1 pt-1 sm:p-0">
+          <h3 className="display text-xl leading-tight sm:text-2xl">{item.name}</h3>
+          <p className="mt-1.5 text-[13px] leading-snug text-white/85 sm:mt-2 sm:text-sm sm:leading-relaxed">{item.description}</p>
+        </div>
 
         {hasOptions && (
-          <>
+          <div className="col-span-2 px-1 sm:px-0">
             <button
               type="button"
               aria-expanded={expanded}
               aria-controls={optsId}
               onClick={() => setExpanded((v) => !v)}
-              className="mt-3 flex items-center justify-between text-left text-sm font-medium text-white transition-colors hover:text-gold sm:mt-4 sm:text-base"
+              className="mt-2 flex w-full items-center justify-between text-left text-sm font-medium text-white transition-colors hover:text-gold sm:mt-4 sm:text-base"
             >
               {expanded ? "View less" : "View More"}
               <Chevron open={expanded} />
@@ -96,10 +99,10 @@ function MenuCard({ item, index }: { item: MenuItem; index: number }) {
                 </ul>
               </div>
             </div>
-          </>
+          </div>
         )}
 
-        <div className="mt-auto flex items-center justify-between gap-3 pt-4">
+        <div className="col-span-2 mt-auto flex items-center justify-between gap-3 px-1 pt-3 sm:px-0 sm:pt-4">
           <span className="truncate text-xs text-white/60">{picked.length ? picked.join(" + ") : ""}</span>
           <OrderButton className="shrink-0 rounded-[4px] px-3.5 py-1.5 text-sm font-semibold shadow-none">Order</OrderButton>
         </div>
