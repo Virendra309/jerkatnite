@@ -6,7 +6,8 @@ export function Reserve({
   image = images.tacos,
   cta = "Get Reservation With Open Table",
   overlay = "bg-black/60",
-}: { image?: string; cta?: string; overlay?: string } = {}) {
+  href = site.openTable,
+}: { image?: string; cta?: string; overlay?: string; href?: string } = {}) {
   return (
     <section className="relative isolate overflow-hidden py-28 text-center sm:py-36">
       <Image src={image} alt="" fill sizes="100vw" className="-z-20 object-cover object-[center_75%]" />
@@ -25,7 +26,7 @@ export function Reserve({
         </h2>
         <p className="mt-4 text-lg text-white/90">Join us for authentic Jamaican flavors and an atmosphere you won&apos;t forget.</p>
         <a
-          href={site.openTable}
+          href={href}
           target="_blank"
           rel="noopener noreferrer"
           className="btn-primary mt-8 rounded-[4px] px-6 py-3 font-semibold shadow-none"

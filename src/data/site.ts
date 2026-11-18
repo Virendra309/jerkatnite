@@ -11,6 +11,8 @@ export const site = {
   phoneHref: "tel:+14438351398",
   email: "catering@jerkatniteinc.com",
   openTable: "https://www.opentable.com/r/jerk-at-nite-baltimore",
+  // Google Maps table booking for Baltimore ("Book Your Spot Now" buttons).
+  googleReserve: "https://www.google.com/maps/reserve/v/dine/c/Aq31k4BzEzY?source=pa&hl=en-US",
   heroVideo: "https://player.vimeo.com/video/1193550185?muted=1&autoplay=1&dnt=1&loop=1&background=1",
 };
 

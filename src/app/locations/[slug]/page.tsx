@@ -11,7 +11,7 @@ import { SocialReels } from "@/components/home/social-reels";
 import { OrderButton } from "@/components/order";
 import { Container, Faq, OrderTicker } from "@/components/ui";
 import { locationPages } from "@/data/location-pages";
-import { days, images, locations, type Location } from "@/data/site";
+import { days, images, locations, site, type Location } from "@/data/site";
 
 export async function generateStaticParams() {
   return locations.map((l) => ({ slug: l.slug }));
@@ -204,7 +204,7 @@ export default async function LocationPage({ params }: PageProps<"/locations/[sl
       <SocialReels />
       {!loc.comingSoon && <DeliveryBanner />}
       <PrivateEventsTeaser />
-      {loc.reservations && <Reserve image="/images/locations/reserved-bg.jpg" cta="Book Your Spot Now" overlay="bg-black/20" />}
+      {loc.reservations && <Reserve image="/images/locations/reserved-bg.jpg" cta="Book Your Spot Now" href={site.googleReserve} overlay="bg-black/20" />}
 
       {/* FAQ */}
       {page && (
