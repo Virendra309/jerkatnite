@@ -51,10 +51,11 @@ export default function LocationsPage() {
             <span aria-current="page" className="text-gold">Locations</span>
           </nav>
           <h1 className="display mt-5 text-5xl sm:text-7xl">
-            Find a <span className="text-gradient">Jerk at Nite</span> Near You
+            Jerk at Nite Locations
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-white/90">
-            Bold Jamaican flavors in Baltimore, Houston and Detroit. All food is Halal, made fresh the day of with no MSG.
+            Discover Caribbean &amp; Jamaican Food Favorites near you. Dine in, pickup or deliver straight to your door. All food is 100%
+            Halal, made fresh the day of with no MSG.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <OrderButton className="rounded-[4px] px-5 py-2.5 font-semibold shadow-none" />

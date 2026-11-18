@@ -167,7 +167,7 @@ export function Header() {
 
       {/* Mobile menu */}
       {open && (
-        <nav id="mobile-nav" aria-label="Mobile" className="absolute inset-x-0 top-full max-h-[calc(100vh-5rem)] overflow-y-auto bg-black/55 pb-4 backdrop-blur-md lg:hidden">
+        <nav id="mobile-nav" aria-label="Mobile" className="absolute inset-x-0 top-full max-h-[calc(100vh-5rem)] overflow-y-auto bg-gradient-to-b from-[#4b4b4b]/85 via-[#2a2a2a]/85 to-black/85 px-2.5 pb-3 pt-1 backdrop-blur-md lg:hidden">
           <ul className="grid">
             {nav.map((item) => {
               const active = isActive(pathname, item);
@@ -191,12 +191,12 @@ export function Header() {
                     )}
                   </div>
                   {item.children && expanded && (
-                    <ul className="mb-2 grid gap-0.5 pl-5">
+                    <ul className="mb-1 -mx-2.5 grid divide-y divide-white/15 border-y border-white/15 bg-black/20">
                       {item.children.map((child) => (
                         <li key={child.href}>
-                          <Link href={child.href} onClick={closeAll} className="flex max-w-xs items-center justify-between px-2 py-2 text-white/85 hover:text-gold">
+                          <Link href={child.href} onClick={closeAll} aria-current={pathname === child.href ? "page" : undefined}
+                            className="block px-3.5 py-3 text-sm font-semibold text-white hover:text-gold aria-[current=page]:text-gold">
                             {child.label}
-                            <span aria-hidden className="text-gradient font-bold">↗</span>
                           </Link>
                         </li>
                       ))}
