@@ -237,7 +237,7 @@ export const nav: NavLink[] = [
   {
     label: "Locations",
     href: "/locations",
-    children: locations.map((l) => ({ label: l.city, href: `/locations/${l.slug}` })),
+    children: locations.filter((l) => !l.comingSoon).map((l) => ({ label: l.city, href: `/locations/${l.slug}` })),
   },
   { label: "Catering", href: "/catering" },
   { label: "Private Events", href: "/private-events" },
