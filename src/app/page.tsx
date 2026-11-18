@@ -49,7 +49,14 @@ export default function Home() {
             <OrderButton />
             <ButtonLink href="/menu" variant="ghost">View Menu</ButtonLink>
           </div>
-          <p className="mt-8 text-sm font-semibold uppercase tracking-widest text-white/60">100% Halal · No MSG · Made fresh daily</p>
+          <Image
+            src="https://jerkatnite.com/wp-content/uploads/2026/03/Frame-1410119846.png"
+            alt="Award winner"
+            width={284}
+            height={63}
+            unoptimized
+            className="mx-auto mt-10 h-auto w-[230px] sm:w-[284px]"
+          />
         </Container>
       </section>
 

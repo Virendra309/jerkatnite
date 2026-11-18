@@ -177,11 +177,11 @@ export function LocationCard({ loc }: { loc: Location }) {
 /** Home-page location tiles: square, edge-to-edge photos with the city, today's hours and Order Now centred. */
 export function LocationTiles() {
   return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-3 px-4 sm:gap-0 sm:px-0 sm:grid-cols-2 lg:grid-cols-4">
       {locations.map((loc) => {
         const [name, state] = loc.city.split(",").map((x) => x.trim());
         return (
-          <article key={loc.slug} className="group relative isolate aspect-square overflow-hidden">
+          <article key={loc.slug} className="group relative isolate overflow-hidden rounded-lg sm:aspect-square sm:rounded-none">
             <Image
               src={loc.image}
               alt=""
@@ -191,23 +191,24 @@ export function LocationTiles() {
             />
             <span aria-hidden className="absolute inset-0 -z-10 bg-black/60 transition-colors duration-500 group-hover:bg-black/45" />
 
-            <div className="flex h-full flex-col items-center justify-center gap-5 p-6 text-center">
+            <div className="flex h-full flex-col items-start justify-center gap-1 px-4 py-4 text-left sm:items-center sm:gap-5 sm:p-6 sm:text-center">
               {loc.comingSoon ? (
                 <>
-                  <h3 className="display whitespace-nowrap text-4xl drop-shadow-lg lg:text-[2.6rem] 2xl:text-5xl">Coming Soon</h3>
-                  <Link href={`/locations/${loc.slug}`} className="text-xl font-medium text-gold transition-colors hover:text-white 2xl:text-2xl">
+                  <h3 className="display whitespace-nowrap text-2xl drop-shadow-lg sm:text-4xl lg:text-[2.6rem] 2xl:text-5xl">Coming Soon</h3>
+                  <Link href={`/locations/${loc.slug}`} className="text-lg font-medium text-gold transition-colors hover:text-white sm:text-xl 2xl:text-2xl">
                     {name} {state}
                   </Link>
                 </>
               ) : (
                 <>
-                  <h3 className="display whitespace-nowrap text-4xl drop-shadow-lg lg:text-[2.6rem] 2xl:text-5xl">
+                  <h3 className="display whitespace-nowrap text-2xl drop-shadow-lg sm:text-4xl lg:text-[2.6rem] 2xl:text-5xl">
                     <Link href={`/locations/${loc.slug}`} className="transition-colors hover:text-gold">
                       {loc.city}
                     </Link>
                   </h3>
-                  <TodayHours slug={loc.slug} className="whitespace-nowrap text-lg font-medium text-gold drop-shadow lg:text-[17px] xl:text-xl 2xl:text-2xl" />
-                  <OrderButton className="rounded-[4px] px-6 py-3 font-semibold shadow-none">Order Now</OrderButton>
+                  {loc.address && <p className="text-xs text-white/85 sm:hidden">{loc.address}</p>}
+                  <TodayHours slug={loc.slug} className="mt-1 whitespace-nowrap text-lg font-medium text-gold drop-shadow sm:mt-0 lg:text-[17px] xl:text-xl 2xl:text-2xl" />
+                  <OrderButton className="self-end rounded-[4px] px-4 py-2 text-sm font-semibold shadow-none sm:self-auto sm:px-6 sm:py-3 sm:text-base">Order Now</OrderButton>
                 </>
               )}
             </div>

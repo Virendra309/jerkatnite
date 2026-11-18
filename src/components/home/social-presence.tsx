@@ -66,7 +66,7 @@ export function SocialPresence({ heading }: { heading?: React.ReactNode } = {}) 
         </p>
 
         <div className="mt-12 text-left">
-        <MobileCarousel label="Jerk at Nite social media" gridClass="md:grid md:grid-cols-2 md:gap-4 lg:grid-cols-4">
+        <MobileCarousel arrows label="Jerk at Nite social media" gridClass="md:grid md:grid-cols-2 md:gap-4 lg:grid-cols-4">
           {socials.map((s) => (
             <div key={s.id} className="h-full">
               <a

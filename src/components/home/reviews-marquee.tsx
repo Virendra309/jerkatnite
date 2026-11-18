@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { MobileCarousel } from "@/components/mobile-carousel";
 import { images, reviews } from "@/data/site";
 
 function Quote({ className = "" }: { className?: string }) {
@@ -15,6 +16,29 @@ function Quote({ className = "" }: { className?: string }) {
         d="M84.2 0 68 30.2c5.6 2.4 9.2 7 9.2 14.4 0 10.4-7.8 16-16.8 16-9.4 0-17.2-6-17.2-17 0-4 .8-7 2.4-10.2L62.8 0h21.4ZM41.2 0 24.8 30.2c5.6 2.4 9.2 7.2 9.2 14.4 0 10.4-7.8 16-16.8 16C7.8 60.6 0 54.6 0 43.6c0-4 1-7.2 2.6-10.2L19.6 0h21.6Z"
       />
     </svg>
+  );
+}
+
+/** Phone version of a review card: gold → green, dark text (as on the live site). */
+function MobileCard({ text }: { text: string }) {
+  return (
+    <figure className="flex h-[340px] flex-col justify-between rounded-xl bg-gradient-to-br from-[#FFE500] via-[#c9dc22] to-[#34A853] p-5 text-black">
+      <svg aria-hidden viewBox="0 0 85 61" className="h-11 w-auto self-start">
+        <path
+          fill="currentColor"
+          d="M84.2 0 68 30.2c5.6 2.4 9.2 7 9.2 14.4 0 10.4-7.8 16-16.8 16-9.4 0-17.2-6-17.2-17 0-4 .8-7 2.4-10.2L62.8 0h21.4ZM41.2 0 24.8 30.2c5.6 2.4 9.2 7.2 9.2 14.4 0 10.4-7.8 16-16.8 16C7.8 60.6 0 54.6 0 43.6c0-4 1-7.2 2.6-10.2L19.6 0h21.6Z"
+        />
+      </svg>
+      <div>
+        <blockquote className="display text-[28px] leading-[0.95]">{text}</blockquote>
+        <figcaption className="mt-4 flex items-center gap-2">
+          <Image src={images.google} alt="Google review" width={28} height={28} className="size-7" />
+          <span aria-label="5 out of 5 stars" className="text-lg tracking-wider">
+            ★★★★★
+          </span>
+        </figcaption>
+      </div>
+    </figure>
   );
 }
 
@@ -59,7 +83,14 @@ export function ReviewsMarquee({ heading }: { heading?: React.ReactNode } = {}) 
           From bold jerk flavors to unforgettable late-night vibes, our guests love the authentic taste and vibrant atmosphere we bring to every plate.
         </p>
       </div>
-      <div className="group/row mt-12 flex overflow-hidden">
+      <div className="mt-10 px-4 md:hidden">
+        <MobileCarousel arrows label="Guest reviews" gridClass="">
+          {reviews.map((r) => (
+            <MobileCard key={r} text={r} />
+          ))}
+        </MobileCarousel>
+      </div>
+      <div className="group/row mt-12 hidden overflow-hidden md:flex">
         <ul className="flex w-max shrink-0 animate-[marquee_60s_linear_infinite] group-hover/row:[animation-play-state:paused] motion-reduce:animate-none">
           {[...base, ...base].map((r, i) => (
             <Card key={i} text={r} hidden={i >= reviews.length} />

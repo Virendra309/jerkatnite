@@ -21,8 +21,8 @@ export function Footer() {
   const hq = locations.find((l) => l.hq) ?? locations[0];
   return (
     <footer className="relative overflow-hidden bg-[#141414]">
-      <div className="mx-auto grid max-w-7xl gap-12 px-4 pb-10 pt-16 sm:px-6 lg:grid-cols-[1.5fr_1fr_0.8fr_1fr]">
-        <div>
+      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-6 gap-y-10 px-4 pb-10 pt-16 sm:px-6 lg:grid-cols-[1.5fr_1fr_0.8fr_1fr] lg:gap-12">
+        <div className="col-span-2 lg:col-span-1">
           <Link href="/" aria-label="Jerk at Nite home">
             <Image src={images.logo} alt="Jerk at Nite" width={240} height={41} />
           </Link>
