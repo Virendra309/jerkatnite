@@ -49,7 +49,10 @@ export default function CareersPage() {
           </h2>
           <ul className="space-y-6">
             {jobs.map((j) => (
-              <li key={j.slug} className="rounded-lg border border-[#1f4d26] bg-black p-5 transition-colors hover:border-[#5ee26f]/70 sm:p-6">
+              <li
+                key={j.slug}
+                className="relative isolate overflow-hidden rounded-lg border border-[#1f4d26] bg-black p-5 transition-colors duration-300 before:absolute before:inset-x-0 before:top-0 before:-z-10 before:h-24 before:bg-gradient-to-b before:from-[#2f9e44] before:to-transparent before:opacity-0 before:transition-opacity before:duration-300 hover:border-[#2f9e44] hover:before:opacity-100 focus-within:border-[#2f9e44] focus-within:before:opacity-100 sm:p-6"
+              >
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                   <div className="max-w-3xl">
                     <h3 className="display text-2xl normal-case">
