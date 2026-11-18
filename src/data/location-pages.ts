@@ -12,7 +12,8 @@ export type LocationPage = {
   /** Hero paragraph. "{address}" is replaced with a Google Maps link to the address. */
   intro: string;
   /** "Parking & Arrival" block. Only shown when we have the details for that location. */
-  arrival?: { parkingTitle?: string; parking: string; gettingHere: string };
+  /** image: photo beside the text (portrait photos get a tall frame). */
+  arrival?: { image?: string; portrait?: boolean; parkingTitle?: string; parking: string; gettingHere: string };
   faqs: { q: string; a: string }[];
 };
 
@@ -76,6 +77,8 @@ export const locationPages: Record<string, LocationPage> = {
     intro:
       "Looking for the best Jamaican restaurant in Houston, TX? Jerk at Nite is right at {address}. Dine in or order bold jerk chicken, slow-braised oxtail and rasta pasta made fresh daily at our H-Town location. Halal, no MSG.",
     arrival: {
+      image: "/images/locations/houston-storefront.jpg",
+      portrait: true,
       parkingTitle: "Parking Near Us",
       parking:
         "Parking is available on and around Westheimer Rd and in the surrounding lots, with more options nearby during busy evenings and weekends. Uber and Lyft drop-offs are welcome right at our entrance.",

@@ -194,8 +194,18 @@ async function Arrival({ params }: { params: Params }) {
   return (
     <section className="bg-gradient-to-b from-black to-[#123d19] py-16">
       <Container className="grid items-center gap-10 md:grid-cols-2">
-        <div className="relative aspect-[4/3] overflow-hidden rounded-xl rounded-tr-[4rem]">
-          <Image src={loc.hq ? images.restaurant : loc.image === images.wings ? images.tacos : images.wings} alt={`Jerk at Nite ${loc.city}`} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover object-[30%_center]" />
+        <div
+          className={`relative overflow-hidden ${
+            page.arrival.portrait ? "mx-auto aspect-[510/676] w-full max-w-md rounded-md md:mx-0 md:justify-self-center" : "aspect-[4/3] rounded-xl rounded-tr-[4rem]"
+          }`}
+        >
+          <Image
+            src={page.arrival.image ?? (loc.hq ? images.restaurant : loc.image === images.wings ? images.tacos : images.wings)}
+            alt={`Jerk at Nite ${loc.city}`}
+            fill
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className="object-cover object-[30%_center]"
+          />
         </div>
         <div>
           <h2 className="display text-5xl leading-[1.05] sm:text-6xl">
