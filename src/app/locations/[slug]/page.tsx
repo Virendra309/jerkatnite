@@ -57,14 +57,14 @@ function PhoneIcon() {
 }
 
 /** Map + address + phone + weekly hours in a glowing green card. */
-function AddressTiming({ loc }: { loc: Location }) {
+function AddressTiming({ loc, title = "Address & Timing" }: { loc: Location; title?: string }) {
   // Monday-first, split in two columns like the live site.
   const order = [[1, 2, 3, 4], [5, 6, 0]];
   return (
     <section className="bg-gradient-to-b from-[#1c5a24] via-[#0b2410] to-black py-16">
       <Container>
         <div className="rounded-2xl border border-[#c6f135]/70 bg-gradient-to-b from-[#123d19] to-black px-5 py-10 shadow-[0_0_40px_rgba(198,241,53,0.25)] sm:px-10">
-          <h2 className="display text-gradient text-center text-5xl sm:text-6xl">Address &amp; Timing</h2>
+          <h2 className="display text-gradient text-center text-5xl sm:text-6xl">{title}</h2>
           <p className="mx-auto mt-4 max-w-3xl text-center text-white/85">
             Find us at a convenient location with easy access, and drop by at a time that suits you. We&apos;re open with flexible hours, ready to serve
             bold flavors whenever you&apos;re craving them.
@@ -156,10 +156,18 @@ async function Hero({ params }: { params: Params }) {
             Locations
           </Link>
           <span aria-hidden className="text-white">›</span>
-          <span aria-current="page" className="text-gold">{name}</span>
+          <span aria-current="page" className="text-gold">{page?.crumb ?? name}</span>
         </nav>
         <h1 className="display mx-auto mt-5 max-w-5xl text-5xl sm:text-7xl">
-          {loc.comingSoon ? <>Coming Soon to {loc.city}</> : <>Award-Winning Jamaican Restaurant in {loc.city}</>}
+          {loc.comingSoon ? (
+            <>Coming Soon to {loc.city}</>
+          ) : page?.title ? (
+            <>
+              {page.title[0]} <span className="text-gradient">{page.title[1]}</span>
+            </>
+          ) : (
+            <>Award-Winning Jamaican Restaurant in {loc.city}</>
+          )}
         </h1>
         {page && (
           <p className="mx-auto mt-4 max-w-3xl text-lg text-white/90">
@@ -187,17 +195,21 @@ async function Arrival({ params }: { params: Params }) {
     <section className="bg-gradient-to-b from-black to-[#123d19] py-16">
       <Container className="grid items-center gap-10 md:grid-cols-2">
         <div className="relative aspect-[4/3] overflow-hidden rounded-xl rounded-tr-[4rem]">
-          <Image src={loc.hq ? images.restaurant : loc.image} alt={`Jerk at Nite ${loc.city}`} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover object-[30%_center]" />
+          <Image src={loc.hq ? images.restaurant : loc.image === images.wings ? images.tacos : images.wings} alt={`Jerk at Nite ${loc.city}`} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover object-[30%_center]" />
         </div>
         <div>
           <h2 className="display text-5xl leading-[1.05] sm:text-6xl">
             Parking &amp; Arrival
             <br />
-            at {name}
+            at {page.accent ? <span className="text-gradient">{loc.city}</span> : name}
           </h2>
           <h3 className="mt-5 font-semibold text-gold">
-            Parking &amp; Arrival at {name}
-            {loc.hq && " (HQ)"}
+            {page.arrival.parkingTitle ?? (
+              <>
+                Parking &amp; Arrival at {name}
+                {loc.hq && " (HQ)"}
+              </>
+            )}
           </h3>
           <p className="mt-2 text-white/85">{page.arrival.parking}</p>
           <h3 className="mt-6 font-semibold text-gold">Getting Here</h3>
@@ -209,8 +221,8 @@ async function Arrival({ params }: { params: Params }) {
 }
 
 async function Timing({ params }: { params: Params }) {
-  const { loc } = await resolve(params);
-  return <AddressTiming loc={loc} />;
+  const { loc, page } = await resolve(params);
+  return <AddressTiming loc={loc} title={page?.timingTitle} />;
 }
 
 async function Delivery({ params }: { params: Params }) {
@@ -220,7 +232,8 @@ async function Delivery({ params }: { params: Params }) {
 
 async function Reservations({ params }: { params: Params }) {
   const { loc } = await resolve(params);
-  return loc.reservations ? <Reserve image="/images/locations/reserved-bg.jpg" cta="Book Your Spot Now" href={site.googleReserve} overlay="bg-black/20" /> : null;
+  // shown on every open location, as on the live site (the banner itself says "Only for Baltimore Location")
+  return !loc.comingSoon ? <Reserve image="/images/locations/reserved-bg.jpg" cta="Book Your Spot Now" href={site.googleReserve} overlay="bg-black/20" /> : null;
 }
 
 async function LocationFaq({ params }: { params: Params }) {
@@ -229,7 +242,9 @@ async function LocationFaq({ params }: { params: Params }) {
   return (
     <section className="bg-gradient-to-b from-[#1c5a24] via-[#0b2410] to-black py-20">
       <Container>
-        <h2 className="display text-5xl sm:text-6xl">Frequently Asked Questions</h2>
+        <h2 className="display text-5xl sm:text-6xl">
+          Frequently Asked {page.accent ? <span className="text-gradient">Questions</span> : "Questions"}
+        </h2>
         <p className="mb-10 mt-3 text-lg text-white/85">Join us for authentic Jamaican flavors and an atmosphere you won&apos;t forget.</p>
         <Faq items={page.faqs} />
       </Container>

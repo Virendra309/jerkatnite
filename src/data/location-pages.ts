@@ -1,10 +1,18 @@
 // Extra content for the individual location pages (/locations/[slug]).
 
 export type LocationPage = {
+  /** Hero heading as [white part, gradient part]. Defaults to "Award-Winning Jamaican Restaurant in <city>". */
+  title?: [string, string];
+  /** Last breadcrumb label. Defaults to the city name. */
+  crumb?: string;
+  /** Gradient city name in the Parking heading and "Questions" in the FAQ heading (Houston style). */
+  accent?: boolean;
+  /** Address card heading. Defaults to "Address & Timing". */
+  timingTitle?: string;
   /** Hero paragraph. "{address}" is replaced with a Google Maps link to the address. */
   intro: string;
   /** "Parking & Arrival" block. Only shown when we have the details for that location. */
-  arrival?: { parking: string; gettingHere: string };
+  arrival?: { parkingTitle?: string; parking: string; gettingHere: string };
   faqs: { q: string; a: string }[];
 };
 
@@ -61,15 +69,48 @@ export const locationPages: Record<string, LocationPage> = {
     ],
   },
   "houston-tx": {
+    title: ["Get Jerked in", "Houston, TX"],
+    crumb: "H-Town",
+    accent: true,
+    timingTitle: "Address & Hours",
     intro:
-      "Looking for Jamaican food in Houston, TX? Jerk at Nite H-Town is at {address}. Taste bold jerk chicken, slow-braised oxtail and rasta pasta made fresh daily. Halal, no MSG.",
+      "Looking for the best Jamaican restaurant in Houston, TX? Jerk at Nite is right at {address}. Dine in or order bold jerk chicken, slow-braised oxtail and rasta pasta made fresh daily at our H-Town location. Halal, no MSG.",
+    arrival: {
+      parkingTitle: "Parking Near Us",
+      parking:
+        "Parking is available on and around Westheimer Rd and in the surrounding lots, with more options nearby during busy evenings and weekends. Uber and Lyft drop-offs are welcome right at our entrance.",
+      gettingHere:
+        "We're on Westheimer Rd in west Houston, easy to reach from major roads including Beltway 8 and I-10. We offer wheelchair-accessible street-level entry for a smooth and comfortable arrival.",
+    },
     faqs: [
-      { q: "Where is Jerk at Nite Houston?", a: "Jerk at Nite Houston is at 12970 Westheimer Rd, Houston, TX." },
-      { q: "What are the Houston hours?", a: "Hours vary by day. See the Address & Timing section above for this week's hours." },
-      halal,
-      different,
-      delivery,
-      { q: "Does Jerk at Nite Houston offer catering?", a: "Yes. Houston is one of our catering locations. Build your order on the Catering page." },
+      { q: "Where is the Jerk at Nite H-Town location?", a: "Jerk at Nite H-Town is at 12970 Westheimer Rd, Houston, TX." },
+      {
+        q: "What Jamaican dishes are available at the H-Town location?",
+        a: "Our signature jerk chicken, slow-braised oxtail, rasta pasta, jerk wings and tacos, plus rice and peas and other Caribbean sides. See the full Menu page.",
+      },
+      {
+        q: "Can I order food online from the H-Town Houston location?",
+        a: "Tap Order Now to see the current pickup and delivery options, or stop by during opening hours.",
+      },
+      {
+        q: "What are the opening hours for Jerk at Nite H-Town?",
+        a: "Tuesday 5:30 PM - 10:30 PM, Saturday 5:00 PM - 1:00 AM and Sunday 4:00 PM - 10:00 PM. Closed Monday, Wednesday, Thursday and Friday.",
+      },
+      { q: "Does Jerk at Nite H-Town offer catering in Houston?", a: "Yes. Houston is one of our catering locations. Build your order on the Catering page." },
+      { q: "Can I host a private event at the H-Town location?", a: "Yes. Tell us about your birthday, corporate dinner or group gathering on the Private Events page." },
+      { q: "Is the food at H-Town made fresh daily?", a: "Yes. Everything is made fresh the same day, 100% Halal with no MSG." },
+      {
+        q: "How is the H-Town location different from other Jerk at Nite spots?",
+        a: "Same bold recipes as our Baltimore HQ, served with Houston hours and the H-Town vibe.",
+      },
+      {
+        q: "Does Jerk at Nite H-Town have vegetarian or allergy-friendly options?",
+        a: "Several dishes can be made with veggies instead of meat. Please tell our team about any allergy when you order so we can help you choose.",
+      },
+      {
+        q: "How do I stay updated on Jerk at Nite H-Town specials and new hours?",
+        a: "Follow @jerkatnite on Instagram, TikTok and Facebook for specials, events and hour changes.",
+      },
     ],
   },
   "detroit-mi": {
