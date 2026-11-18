@@ -5,6 +5,8 @@ export type LocationPage = {
   title?: [string, string];
   /** Last breadcrumb label. Defaults to the city name. */
   crumb?: string;
+  /** Gradient text for the second line of the Parking heading, e.g. "at Detroit". */
+  accentCity?: string;
   /** Gradient city name in the Parking heading and "Questions" in the FAQ heading (Houston style). */
   accent?: boolean;
   /** Address card heading. Defaults to "Address & Timing". */
@@ -117,16 +119,46 @@ export const locationPages: Record<string, LocationPage> = {
     ],
   },
   "detroit-mi": {
+    title: ["Get Jerked in", "Detroit, MI"],
+    accentCity: "at Detroit",
     intro:
-      "Looking for Jamaican food in Detroit, MI? Jerk at Nite Detroit is at {address}. Order pickup or delivery and taste bold jerk chicken, slow-braised oxtail and rasta pasta made fresh daily. Halal, no MSG.",
+      "Looking for the best Jamaican restaurant in Detroit, MI? Jerk at Nite is right at {address} on the historic Avenue of Fashion near the University of Detroit Mercy. Dine in or order bold jerk chicken, slow-braised oxtail and rasta pasta made fresh daily at our Detroit location. Halal, no MSG.",
+    arrival: {
+      parkingTitle: "Parking Near Us",
+      parking:
+        "Free parking is available along Livernois Ave and on nearby side streets. The location sits on Detroit's Avenue of Fashion, a well-known commercial corridor that is easy to access by car.",
+      gettingHere:
+        "Livernois Ave is a main artery in northwest Detroit, easily accessible from I-96, M-10 and the surrounding neighborhoods. Ride share drop-offs are convenient right at the entrance. The location is wheelchair accessible.",
+    },
     faqs: [
-      { q: "Does Jerk at Nite have a location in Detroit?", a: "Yes, at 19163 Livernois Ave, Detroit, MI 48221." },
-      { q: "What are the Detroit hours?", a: "Hours vary by day. See the Address & Timing section above for this week's hours." },
-      { q: "What is the phone number for Jerk at Nite Detroit?", a: "You can reach the Detroit location at +1 (313) 739-6021." },
-      halal,
-      different,
-      delivery,
-      { q: "Does Jerk at Nite Detroit offer catering?", a: "Yes. Detroit is one of our catering locations. Build your order on the Catering page." },
+      { q: "Where is Jerk at Nite located in Detroit?", a: "At 19163 Livernois Ave, Detroit, MI 48221, on the Avenue of Fashion near the University of Detroit Mercy." },
+      {
+        q: "What is the most popular dish at Jerk at Nite Detroit?",
+        a: "Guest favorites include our smoky jerk chicken, slow-braised oxtail and rasta pasta, all made fresh daily.",
+      },
+      {
+        q: "Can I get Jamaican food delivery in Detroit from Jerk at Nite?",
+        a: "Yes. Order delivery or pickup through DoorDash, Uber Eats or Toast. Tap Order Now and choose Detroit.",
+      },
+      {
+        q: "Which location is best for dine-in?",
+        a: "Baltimore (HQ) is our flagship for dine-in with OpenTable reservations. In Detroit you can dine in or order pickup and delivery.",
+      },
+      { q: "Does Jerk at Nite Detroit offer catering for events in Michigan?", a: "Yes. Detroit is one of our catering locations. Build your order on the Catering page." },
+      {
+        q: "Is Jerk at Nite Detroit connected to the DC and Baltimore locations?",
+        a: "Yes. Detroit is part of the same Jerk at Nite family that started at Howard University in DC, with our HQ in Baltimore. Same recipes, same bold flavors.",
+      },
+      {
+        q: "Is late-night Jamaican food delivery available across Detroit?",
+        a: "Delivery runs during Detroit opening hours, up to 11:00 PM on Fridays and Saturdays, through DoorDash and Uber Eats.",
+      },
+      howard,
+      {
+        q: "What are the opening hours for Jerk at Nite Detroit?",
+        a: "Tuesday to Thursday 12:00 PM - 9:00 PM, Friday and Saturday 12:00 PM - 11:00 PM, Sunday 12:00 PM - 6:00 PM. Closed Monday.",
+      },
+      { q: "Is Jerk at Nite expanding to any other cities soon?", a: "Yes, Washington DC is next. Follow @jerkatnite on Instagram for announcements." },
     ],
   },
   "washington-dc": {

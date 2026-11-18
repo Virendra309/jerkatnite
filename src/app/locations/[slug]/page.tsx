@@ -211,7 +211,11 @@ async function Arrival({ params }: { params: Params }) {
           <h2 className="display text-5xl leading-[1.05] sm:text-6xl">
             Parking &amp; Arrival
             <br />
-            at {page.accent ? <span className="text-gradient">{loc.city}</span> : name}
+            {page.accentCity ? (
+              <span className="text-gradient">{page.accentCity}</span>
+            ) : (
+              <>at {page.accent ? <span className="text-gradient">{loc.city}</span> : name}</>
+            )}
           </h2>
           <h3 className="mt-5 font-semibold text-gold">
             {page.arrival.parkingTitle ?? (
