@@ -24,6 +24,48 @@ export function MobileCarousel({
   const paused = useRef(false);
   const resume = useRef<number | undefined>(undefined);
 
+  // Index of the card we are on / heading to. Arrow taps and autoplay step from this number rather than
+  // from the live scroll position, so fast repeated taps never land between two cards.
+  const index = useRef(0);
+  const programmatic = useRef(false);
+
+  const cards = () => Array.from(ref.current?.children ?? []) as HTMLElement[];
+  const leftFor = (el: HTMLDivElement, k: HTMLElement) => k.offsetLeft - (el.clientWidth - k.offsetWidth) / 2;
+
+  const scrollToIndex = (i: number) => {
+    const el = ref.current;
+    const kids = cards();
+    if (!el || !kids.length) return;
+    index.current = ((i % kids.length) + kids.length) % kids.length;
+    programmatic.current = true;
+    el.scrollTo({ left: leftFor(el, kids[index.current]), behavior: "smooth" });
+  };
+
+  // After the visitor swipes (not after our own scrolls), read which card is now centred.
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let t: number | undefined;
+    const settle = () => {
+      if (programmatic.current) {
+        programmatic.current = false;
+        return;
+      }
+      const center = el.scrollLeft + el.clientWidth / 2;
+      const i = cards().findIndex((k) => k.offsetLeft <= center && center < k.offsetLeft + k.offsetWidth);
+      if (i >= 0) index.current = i;
+    };
+    const onScroll = () => {
+      window.clearTimeout(t);
+      t = window.setTimeout(settle, 140);
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      window.clearTimeout(t);
+    };
+  }, []);
+
   useEffect(() => {
     const el = ref.current;
     if (!el || window.matchMedia("(min-width: 768px)").matches) return;
@@ -32,13 +74,10 @@ export function MobileCarousel({
       if (paused.current) return;
       const r = el.getBoundingClientRect();
       if (r.bottom < 0 || r.top > window.innerHeight) return; // only while on screen
-      const kids = Array.from(el.children) as HTMLElement[];
-      const center = el.scrollLeft + el.clientWidth / 2;
-      const current = kids.findIndex((k) => k.offsetLeft <= center && center < k.offsetLeft + k.offsetWidth);
-      const next = kids[(current + 1) % kids.length];
-      el.scrollTo({ left: next.offsetLeft - (el.clientWidth - next.offsetWidth) / 2, behavior: "smooth" });
+      scrollToIndex(index.current + 1);
     }, interval);
     return () => window.clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [interval]);
 
   // a touch pauses autoplay for a while so it doesn't fight the visitor's swipe
@@ -51,16 +90,9 @@ export function MobileCarousel({
   };
 
   const go = (dir: 1 | -1) => {
-    const el = ref.current;
-    if (!el) return;
     pause();
-    const kids = Array.from(el.children) as HTMLElement[];
-    const center = el.scrollLeft + el.clientWidth / 2;
-    const current = Math.max(0, kids.findIndex((k) => k.offsetLeft <= center && center < k.offsetLeft + k.offsetWidth));
-    const next = kids[(current + dir + kids.length) % kids.length];
-    el.scrollTo({ left: next.offsetLeft - (el.clientWidth - next.offsetWidth) / 2, behavior: "smooth" });
+    scrollToIndex(index.current + dir);
   };
-
 
   return (
     <>
