@@ -54,11 +54,12 @@ export const jobs: Job[] = [
     type: "Full Time",
     location: allLocations,
     duties: [
-      "Welcome every guest with energy and a smile",
-      "Manage reservations, the waitlist and seating",
-      "Keep the flow of the dining room balanced between servers",
-      "Answer phone calls and questions about hours, menu and events",
-      "Keep the entrance and host stand clean and organized",
+      "Welcome guests with a warm, friendly greeting upon arrival",
+      "Seat guests based on party size and table availability",
+      "Manage both reservations and walk-in guests at the same time",
+      "Communicate table readiness clearly to the server team",
+      "Keep the entrance area tidy, organized, and professional",
+      "Handle any guest concerns at the door with care and professionalism",
     ],
   },
   {
