@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { ApplicationForm } from "@/components/application-form";
+import { ApplySection } from "@/components/application-form";
 import { Container } from "@/components/ui";
 import { jobs } from "@/data/jobs";
 import { locations } from "@/data/site";
@@ -55,8 +55,8 @@ async function JobDetails({ params }: { params: Params }) {
             ))}
           </ul>
           <p className="mt-8 text-lg italic text-white/90">Available at: {job.location}</p>
-          <div className="mt-16">
-            <ApplicationForm role={job.title} roles={roles} locations={applyLocations} />
+          <div className="mt-12">
+            <ApplySection key={job.slug} role={job.title} roles={roles} locations={applyLocations} />
           </div>
         </Container>
       </section>

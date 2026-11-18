@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { site } from "@/data/site";
 
 /**
@@ -9,7 +9,40 @@ import { site } from "@/data/site";
  * a browser can't attach the chosen resume to that email, so we ask them to attach it there.
  * Swap onSubmit for a form service (Formspree, Resend, an API route) to receive resumes directly.
  */
-export function ApplicationForm({ role, roles, locations }: { role: string; roles: string[]; locations: string[] }) {
+/** "Apply Now" button; the application form opens below it once clicked. */
+export function ApplySection(props: { role: string; roles: string[]; locations: string[] }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    ref.current?.querySelector<HTMLInputElement>("input[name=name]")?.focus({ preventScroll: true });
+  }, [open]);
+
+  return (
+    <>
+      {!open && (
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          aria-expanded={open}
+          aria-controls="apply"
+          className="btn-primary rounded-md px-6 py-3 text-lg font-semibold shadow-none"
+        >
+          Apply Now
+        </button>
+      )}
+      {open && (
+        <div ref={ref} className="animate-rise scroll-mt-28">
+          <ApplicationForm {...props} />
+        </div>
+      )}
+    </>
+  );
+}
+
+function ApplicationForm({ role, roles, locations }: { role: string; roles: string[]; locations: string[] }) {
   const [sent, setSent] = useState<string | null>(null);
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
