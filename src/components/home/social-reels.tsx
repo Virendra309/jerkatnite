@@ -196,18 +196,26 @@ function ReelsSlider() {
 }
 
 /** "What people tells about us on social media platforms" — Instagram-style post cards. */
-export function SocialReels() {
+export function SocialReels({ heading, text }: { heading?: React.ReactNode; text?: string } = {}) {
   return (
     <section className="bg-gradient-to-b from-[#1c5a24] via-[#0b2410] to-black py-20">
       <div className="mx-auto max-w-6xl px-4 text-center sm:px-6">
         <h2 className="display text-4xl sm:text-6xl">
-          What People Tells About Us
-          <br />
-          On Social Media Platforms
+          {heading ?? (
+            <>
+              What People Tells About Us
+              <br />
+              On Social Media Platforms
+            </>
+          )}
         </h2>
         <p className="mx-auto mt-5 max-w-3xl text-lg text-white/90">
+          {text ?? (
+            <>
           From mouthwatering food posts to real customer experiences, our community loves sharing their favorite moments with us. See how
           our bold flavors and vibrant vibes are making an impact online.
+        </>
+          )}
         </p>
 
         <ReelsSlider />

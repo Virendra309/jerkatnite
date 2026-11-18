@@ -47,13 +47,17 @@ function SocialIcon({ id }: { id: Id }) {
 }
 
 /** "Our Noticeable Social Presence" — clickable phone cards linking to each profile. */
-export function SocialPresence() {
+export function SocialPresence({ heading }: { heading?: React.ReactNode } = {}) {
   return (
     <section className="bg-gradient-to-b from-[#1c5a24] via-[#0b2410] to-black py-20">
       <div className="mx-auto max-w-7xl px-4 text-center sm:px-6">
         <h2 className="display text-5xl sm:text-7xl">
-          <span className="block">Our Noticeable</span>
-          <span className="text-gradient block">Social Presence</span>
+          {heading ?? (
+            <>
+              <span className="block">Our Noticeable</span>
+              <span className="text-gradient block">Social Presence</span>
+            </>
+          )}
         </h2>
         <p className="mx-auto mt-5 max-w-3xl text-lg text-white/85">
           Our growing social community shares their favorite dishes, moments, and experiences with us every day. Follow along to stay
