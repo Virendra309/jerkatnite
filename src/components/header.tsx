@@ -144,7 +144,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <OrderButton className="hidden whitespace-nowrap rounded-[4px] px-5 py-2.5 font-semibold shadow-none hover:shadow-none sm:inline-flex" />
+          <OrderButton className="whitespace-nowrap rounded-[4px] px-3 py-2 text-sm font-semibold shadow-none hover:shadow-none sm:px-5 sm:py-2.5 sm:text-base" />
           <button
             className="rounded-lg p-2 lg:hidden"
             aria-label={open ? "Close menu" : "Open menu"}
@@ -200,7 +200,6 @@ export function Header() {
               );
             })}
           </ul>
-          <OrderButton className="mt-4 w-full sm:hidden" />
         </nav>
       )}
     </header>

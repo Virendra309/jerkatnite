@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { MobileCarousel } from "@/components/mobile-carousel";
 import { socials } from "@/data/site";
 
 type Id = (typeof socials)[number]["id"];
@@ -64,9 +65,10 @@ export function SocialPresence({ heading }: { heading?: React.ReactNode } = {}) 
           connected with the latest flavors, updates, and island vibes. <span aria-hidden>📸🔥</span>
         </p>
 
-        <ul className="mt-12 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div className="mt-12 text-left">
+        <MobileCarousel label="Jerk at Nite social media" gridClass="md:grid md:grid-cols-2 md:gap-4 lg:grid-cols-4">
           {socials.map((s) => (
-            <li key={s.id}>
+            <div key={s.id} className="h-full">
               <a
                 href={s.href}
                 target="_blank"
@@ -83,12 +85,13 @@ export function SocialPresence({ heading }: { heading?: React.ReactNode } = {}) 
                   Follow on {s.label} ↗
                 </span>
                 <div className="relative mt-3 w-full max-w-[220px] translate-y-3 transition-transform duration-500 ease-out group-hover:translate-y-0">
-                  <Image src={s.phone} alt="" width={250} height={362} sizes="(min-width: 1024px) 220px, 45vw" className="h-auto w-full" />
+                  <Image src={s.phone} alt="" width={250} height={362} sizes="(min-width: 1024px) 220px, 60vw" className="h-auto w-full" />
                 </div>
               </a>
-            </li>
+            </div>
           ))}
-        </ul>
+        </MobileCarousel>
+        </div>
       </div>
     </section>
   );

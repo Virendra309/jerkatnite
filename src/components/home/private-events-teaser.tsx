@@ -21,7 +21,7 @@ export function PrivateEventsTeaser() {
           width={1014}
           height={1024}
           sizes="(min-width: 1024px) 50vw, 100vw"
-          className="mx-auto w-full max-w-lg transition-transform duration-700 hover:-rotate-1 hover:scale-[1.02]"
+          className="mx-auto hidden w-full max-w-lg transition-transform lg:block duration-700 hover:-rotate-1 hover:scale-[1.02]"
         />
         <div>
           <h2 className="display text-5xl sm:text-7xl">
@@ -31,6 +31,14 @@ export function PrivateEventsTeaser() {
               <Image src={images.eventThumb} alt="" width={94} height={70} aria-hidden className="h-12 w-auto rounded border-2 border-white sm:h-14" />
             </span>
           </h2>
+          <Image
+            src={images.events}
+            alt="Guests celebrating a birthday party at Jerk at Nite"
+            width={1014}
+            height={1024}
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            className="mx-auto mt-8 w-full max-w-lg lg:hidden"
+          />
           <p className="mt-6 text-lg leading-relaxed text-white/85">
             From intimate birthday dinners to full-scale corporate mixers, the Jerk at Nite experience is the perfect setting for your
             next occasion. Bold Jamaican food, an unforgettable atmosphere, and a team that makes sure every event runs smoothly. A

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { MobileCarousel } from "@/components/mobile-carousel";
 import { OrderButton } from "@/components/order";
 import { CapturedMoments } from "@/components/home/captured-moments";
 import { CateringSlider } from "@/components/home/catering-slider";
@@ -12,10 +13,10 @@ import { ButtonLink, Container, Faq, Heading, LocationTiles, OrderTicker } from 
 import { images, locations, site } from "@/data/site";
 
 const features = [
-  { title: "Food Menu", text: "Bold Jamaican flavors, made fresh daily. All Halal, no MSG.", img: images.tacos, alt: "Jerk at Nite tacos", href: "/menu", cta: "Explore Our Menu", tilt: "-rotate-2" },
-  { title: "Order Online", text: "Pickup or delivery from a location near you with DoorDash, Grubhub, Uber Eats or Toast.", img: images.wings, alt: "Jerk at Nite chicken wings", href: null, cta: "Order Now", tilt: "rotate-1" },
-  { title: "Private Events", text: "Birthdays, corporate dinners, group gatherings. We handle the food and the vibes.", img: images.restaurant, alt: "Jerk at Nite restaurant", href: "/private-events", cta: "Plan Your Event", tilt: "-rotate-1" },
-  { title: "Catering", text: "Fresh Jamaican trays brought straight to your event. Bold flavor, generous portions.", img: images.catering, alt: "Jerk at Nite catering trays", href: "/catering", cta: "Request Catering", tilt: "rotate-2" },
+  { title: "Food Menu", text: "Bold Jamaican flavors, made fresh daily. All Halal, no MSG.", img: images.tacos, alt: "Jerk at Nite tacos", href: "/menu", cta: "Explore Our Menu", tilt: "md:-rotate-2" },
+  { title: "Order Online", text: "Pickup or delivery from a location near you with DoorDash, Grubhub, Uber Eats or Toast.", img: images.wings, alt: "Jerk at Nite chicken wings", href: null, cta: "Order Now", tilt: "md:rotate-1" },
+  { title: "Private Events", text: "Birthdays, corporate dinners, group gatherings. We handle the food and the vibes.", img: images.restaurant, alt: "Jerk at Nite restaurant", href: "/private-events", cta: "Plan Your Event", tilt: "md:-rotate-1" },
+  { title: "Catering", text: "Fresh Jamaican trays brought straight to your event. Bold flavor, generous portions.", img: images.catering, alt: "Jerk at Nite catering trays", href: "/catering", cta: "Request Catering", tilt: "md:rotate-2" },
 ];
 
 export default function Home() {
@@ -54,9 +55,10 @@ export default function Home() {
 
       {/* Feature cards */}
       <section className="py-20">
-        <Container className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <Container>
+          <MobileCarousel label="Explore Jerk at Nite" gridClass="md:grid md:grid-cols-2 md:gap-6 lg:grid-cols-4">
           {features.map((f) => (
-            <article key={f.title} className={`${f.tilt} rounded-2xl bg-gradient-to-b from-leaf/60 to-transparent p-px transition hover:rotate-0`}>
+            <article key={f.title} className={`${f.tilt} h-full rounded-2xl bg-gradient-to-b from-leaf/60 to-transparent p-px transition hover:rotate-0`}>
               <div className="flex h-full flex-col rounded-2xl bg-ink-2 p-4">
                 <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
                   <Image src={f.img} alt={f.alt} fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
@@ -69,6 +71,7 @@ export default function Home() {
               </div>
             </article>
           ))}
+          </MobileCarousel>
         </Container>
       </section>
 
@@ -78,7 +81,7 @@ export default function Home() {
       <section className="py-24">
         <Container className="grid items-center gap-12 lg:grid-cols-2">
           <div>
-            <Heading top="Who we are." accent="Jerk at Nite" />
+            <Heading top="Who we are. About" accent="Jerk at Nite" />
             <p className="mt-6 text-white/75">
               The founder started selling his flavorful Jamaican jerk chicken from his dorm room in Drew Hall at Howard University in
               2012. After 10pm the campus cafeteria closed, and students studying late were left with greasy fast food. Raised in a
@@ -99,16 +102,19 @@ export default function Home() {
       {/* Locations */}
       <section className="pt-24">
         <Container>
-          <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-gold">Find us</p>
-              <Heading top={`We are located in ${openCount}`} accent="Different Areas" />
-            </div>
+          <div className="mb-12 flex flex-wrap items-center justify-between gap-6">
             <div className="flex items-center gap-4">
-              <p className="hidden text-sm text-white/60 sm:block">
-                <span className="font-semibold text-white">{openCount}</span> open ·{" "}
-                <span className="font-semibold text-white">{locations.length - openCount}</span> coming soon
-              </p>
+              <span className="display text-gradient text-[5.5rem] italic leading-none sm:text-[10rem]">{openCount}</span>
+              <h2 className="display text-3xl italic leading-[1.05] sm:text-6xl">
+                We Are Located In
+                <br />
+                <span className="text-gradient">Different Areas</span>
+              </h2>
+              <svg aria-hidden viewBox="0 0 24 24" className="ml-2 mt-16 hidden size-10 shrink-0 text-chili md:block" fill="currentColor">
+                <path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z" />
+              </svg>
+            </div>
+            <div className="hidden md:block">
               <ButtonLink href="/locations" variant="ghost">All Locations</ButtonLink>
             </div>
           </div>
