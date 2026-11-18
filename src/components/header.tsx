@@ -144,21 +144,21 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <OrderButton className="whitespace-nowrap rounded-[4px] px-3 py-2 text-sm font-semibold shadow-none hover:shadow-none sm:px-5 sm:py-2.5 sm:text-base" />
+          <OrderButton className="whitespace-nowrap rounded-md px-5 py-2 text-[15px] font-semibold shadow-none hover:shadow-none sm:py-2.5 sm:text-base" />
           <button
-            className={`grid size-10 place-items-center rounded-[4px] transition-colors lg:hidden ${open ? "bg-white text-black" : "text-white"}`}
+            className="grid size-9 place-items-center rounded-md bg-white text-black transition-colors lg:hidden"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             aria-controls="mobile-nav"
             onClick={() => setOpen((v) => !v)}
           >
             {open ? (
-              <svg viewBox="0 0 24 24" className="size-7" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden>
+              <svg viewBox="0 0 24 24" className="size-6" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" aria-hidden>
                 <path d="M6 6l12 12M18 6 6 18" />
               </svg>
             ) : (
-              <svg viewBox="0 0 24 24" className="size-7" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden>
-                <path d="M3 6h18M3 12h18M3 18h18" />
+              <svg viewBox="0 0 24 24" className="size-6" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" aria-hidden>
+                <path d="M4 6.5h16M4 12h16M4 17.5h16" />
               </svg>
             )}
           </button>
