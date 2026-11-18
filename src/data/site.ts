@@ -99,7 +99,7 @@ export const locations: Location[] = [
     timeZone: "America/New_York",
     hq: true,
     reservations: true,
-    hours: ["3:00 PM – 10:00 PM", null, null, "4:00 PM – 10:00 PM", "4:00 PM – 10:00 PM", null, "5:00 PM – 1:00 AM"],
+    hours: ["4:00 PM – 10:00 PM", null, null, "4:00 PM – 10:00 PM", "4:00 PM – 10:00 PM", null, "5:00 PM – 1:00 AM"],
     // Verified Baltimore store pages. Direct Pickup opens the restaurant in Google Maps, as on jerkatnite.com.
     order: {
       pickup: [

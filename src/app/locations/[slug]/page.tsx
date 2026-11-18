@@ -1,8 +1,17 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { FeatureCards } from "@/components/feature-cards";
+import { CapturedMoments } from "@/components/home/captured-moments";
+import { DeliveryBanner } from "@/components/home/delivery-banner";
+import { PrivateEventsTeaser } from "@/components/home/private-events-teaser";
+import { Reserve } from "@/components/home/reserve";
+import { SocialReels } from "@/components/home/social-reels";
 import { OrderButton } from "@/components/order";
-import { ButtonLink, Container, PageHero } from "@/components/ui";
-import { days, locations, site } from "@/data/site";
+import { Container, Faq, OrderTicker } from "@/components/ui";
+import { locationPages } from "@/data/location-pages";
+import { days, images, locations, type Location } from "@/data/site";
 
 export async function generateStaticParams() {
   return locations.map((l) => ({ slug: l.slug }));
@@ -11,52 +20,202 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/locations/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const loc = locations.find((l) => l.slug === slug);
-  return loc ? { title: `${loc.city} Location`, description: `Jerk at Nite ${loc.city}: address, hours and online ordering.` } : {};
+  if (!loc) return {};
+  return {
+    title: loc.comingSoon ? `${loc.city} (Coming Soon)` : `Jamaican Restaurant in ${loc.city}`,
+    description: locationPages[slug]?.intro.replace("{address}", loc.address ?? loc.city),
+  };
+}
+
+const mapsUrl = (loc: Location) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`Jerk at Nite ${loc.mapsQuery}`)}`;
+
+/** Hero paragraph with the "{address}" placeholder turned into a map link. */
+function Intro({ loc, text }: { loc: Location; text: string }) {
+  const [before, after] = text.split("{address}");
+  return (
+    <>
+      {before}
+      {after !== undefined && (
+        <>
+          <a href={mapsUrl(loc)} target="_blank" rel="noopener noreferrer" className="text-[#9be564] underline underline-offset-2 hover:text-gold">
+            {loc.address}
+          </a>
+          {after}
+        </>
+      )}
+    </>
+  );
+}
+
+function PhoneIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="size-4 shrink-0" fill="currentColor" aria-hidden>
+      <path d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z" />
+    </svg>
+  );
+}
+
+/** Map + address + phone + weekly hours in a glowing green card. */
+function AddressTiming({ loc }: { loc: Location }) {
+  // Monday-first, split in two columns like the live site.
+  const order = [[1, 2, 3, 4], [5, 6, 0]];
+  return (
+    <section className="bg-gradient-to-b from-[#1c5a24] via-[#0b2410] to-black py-16">
+      <Container>
+        <div className="rounded-2xl border border-[#c6f135]/70 bg-gradient-to-b from-[#123d19] to-black px-5 py-10 shadow-[0_0_40px_rgba(198,241,53,0.25)] sm:px-10">
+          <h2 className="display text-gradient text-center text-5xl sm:text-6xl">Address &amp; Timing</h2>
+          <p className="mx-auto mt-4 max-w-3xl text-center text-white/85">
+            Find us at a convenient location with easy access, and drop by at a time that suits you. We&apos;re open with flexible hours, ready to serve
+            bold flavors whenever you&apos;re craving them.
+          </p>
+
+          <div className="mt-10 grid items-center gap-8 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
+            <div className="relative overflow-hidden rounded-xl border border-white/15 bg-white">
+              <iframe
+                src={`https://www.google.com/maps?q=${encodeURIComponent(loc.mapsQuery)}&z=11&output=embed`}
+                title={`Map of Jerk at Nite ${loc.city}`}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="block aspect-[4/3] w-full"
+              />
+              <a
+                href={mapsUrl(loc)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute left-2 top-2 rounded bg-white px-2.5 py-1 text-xs font-semibold text-[#1a73e8] shadow hover:bg-gray-100"
+              >
+                Open in Maps ↗
+              </a>
+            </div>
+
+            <div>
+              <p className="text-sm font-semibold text-white">{loc.short} location:</p>
+              {loc.address ? (
+                <a href={mapsUrl(loc)} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block text-lg text-gold hover:underline">
+                  {loc.address}
+                </a>
+              ) : (
+                <p className="mt-1 text-lg text-gold">Coming soon</p>
+              )}
+              {loc.phone && (
+                <a href={`tel:${loc.phone.replace(/[^\d+]/g, "")}`} className="mt-3 flex items-center gap-2 text-white/90 hover:text-gold">
+                  <PhoneIcon />
+                  {loc.phone}
+                </a>
+              )}
+
+              <h3 className="display mt-6 text-3xl text-gold">Open Timing:</h3>
+              {loc.hours ? (
+                <div className="mt-3 grid gap-x-10 gap-y-2 sm:grid-cols-2">
+                  {order.map((col, c) => (
+                    <dl key={c} className="grid grid-cols-[6.5rem_1rem_1fr] gap-y-2 text-[15px]">
+                      {col.map((d) => (
+                        <div key={d} className="contents">
+                          <dt className="text-white">{days[d]}</dt>
+                          <span aria-hidden className="text-white/70">:</span>
+                          <dd className="text-gold">{loc.hours![d]?.replace("–", "-") ?? "Closed"}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  ))}
+                </div>
+              ) : (
+                <p className="mt-3 text-white/85">Hours will be announced when we open.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
 }
 
 export default async function LocationPage({ params }: PageProps<"/locations/[slug]">) {
   const { slug } = await params;
   const loc = locations.find((l) => l.slug === slug);
   if (!loc) notFound();
-
-  const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(loc.mapsQuery)}&output=embed`;
+  const page = locationPages[slug];
+  const [name] = loc.city.split(",");
 
   return (
     <>
-      <PageHero eyebrow={loc.comingSoon ? "Coming soon" : "Jerk at Nite"} accent={loc.city}>
-        {loc.address ?? "We're bringing the island vibes here soon. Follow us on social for opening news."}
-      </PageHero>
-
-      <Container className="grid gap-10 pb-24 lg:grid-cols-2">
-        <div className="space-y-8">
-          {loc.hours && (
-            <section aria-labelledby="hours" className="rounded-2xl border border-white/10 bg-ink-2 p-6">
-              <h2 id="hours" className="display text-3xl">Hours</h2>
-              <dl className="mt-4 divide-y divide-white/10">
-                {loc.hours.map((h, i) => (
-                  <div key={days[i]} className="flex justify-between py-2">
-                    <dt className="font-semibold">{days[i]}</dt>
-                    <dd className={h ? "text-white/80" : "text-white/45"}>{h ?? "Closed"}</dd>
-                  </div>
-                ))}
-              </dl>
-            </section>
-          )}
-          <div className="flex flex-wrap gap-4">
-            {!loc.comingSoon && <OrderButton />}
-            {loc.reservations && <ButtonLink href={site.openTable} external variant="ghost">Reserve with OpenTable</ButtonLink>}
-            <ButtonLink href="/locations" variant="ghost">All Locations</ButtonLink>
+      {/* Hero */}
+      <section className="relative isolate flex min-h-[78vh] items-center justify-center overflow-hidden pb-16 pt-32 text-center">
+        <Image src={loc.hq ? images.restaurant : loc.image} alt="" fill priority sizes="100vw" className="animate-ken-burns -z-20 object-cover" />
+        <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-b from-black/65 via-black/55 to-black" />
+        <Container className="animate-rise">
+          <nav aria-label="Breadcrumb" className="mx-auto inline-flex items-center gap-3 rounded-full bg-black/50 px-6 py-2 backdrop-blur-sm">
+            <Link href="/" className="text-white hover:text-gold">
+              Home
+            </Link>
+            <span aria-hidden className="text-white">›</span>
+            <Link href="/locations" className="text-white hover:text-gold">
+              Locations
+            </Link>
+            <span aria-hidden className="text-white">›</span>
+            <span aria-current="page" className="text-gold">{name}</span>
+          </nav>
+          <h1 className="display mx-auto mt-5 max-w-5xl text-5xl sm:text-7xl">
+            {loc.comingSoon ? <>Coming Soon to {loc.city}</> : <>Award-Winning Jamaican Restaurant in {loc.city}</>}
+          </h1>
+          {page && <p className="mx-auto mt-4 max-w-3xl text-lg text-white/90"><Intro loc={loc} text={page.intro} /></p>}
+          <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <OrderButton className="rounded-[4px] px-5 py-2.5 font-semibold shadow-none" />
+            <Link
+              href="/menu"
+              className="inline-flex items-center justify-center rounded-[4px] bg-white px-5 py-2.5 font-semibold text-black transition hover:-translate-y-0.5 hover:bg-gold"
+            >
+              View Menu
+            </Link>
           </div>
-        </div>
+        </Container>
+      </section>
 
-        <iframe
-          src={mapSrc}
-          title={`Map of Jerk at Nite ${loc.city}`}
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          className="min-h-96 w-full rounded-2xl border border-white/10"
-        />
-      </Container>
+      <FeatureCards />
+
+      {/* Parking & Arrival */}
+      {page?.arrival && (
+        <section className="bg-gradient-to-b from-black to-[#123d19] py-16">
+          <Container className="grid items-center gap-10 md:grid-cols-2">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-xl rounded-tr-[4rem]">
+              <Image src={loc.hq ? images.restaurant : loc.image} alt={`Jerk at Nite ${loc.city}`} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover object-[30%_center]" />
+            </div>
+            <div>
+              <h2 className="display text-5xl leading-[1.05] sm:text-6xl">
+                Parking &amp; Arrival
+                <br />
+                at {name}
+              </h2>
+              <h3 className="mt-5 font-semibold text-gold">
+                Parking &amp; Arrival at {name}
+                {loc.hq && " (HQ)"}
+              </h3>
+              <p className="mt-2 text-white/85">{page.arrival.parking}</p>
+              <h3 className="mt-6 font-semibold text-gold">Getting Here</h3>
+              <p className="mt-2 text-white/85">{page.arrival.gettingHere}</p>
+            </div>
+          </Container>
+        </section>
+      )}
+
+      <OrderTicker />
+      <AddressTiming loc={loc} />
+      <CapturedMoments />
+      <SocialReels />
+      {!loc.comingSoon && <DeliveryBanner />}
+      <PrivateEventsTeaser />
+      {loc.reservations && <Reserve image="/images/locations/reserved-bg.jpg" cta="Book Your Spot Now" overlay="bg-black/20" />}
+
+      {/* FAQ */}
+      {page && (
+        <section className="bg-gradient-to-b from-[#1c5a24] via-[#0b2410] to-black py-20">
+          <Container>
+            <h2 className="display text-5xl sm:text-6xl">Frequently Asked Questions</h2>
+            <p className="mb-10 mt-3 text-lg text-white/85">Join us for authentic Jamaican flavors and an atmosphere you won&apos;t forget.</p>
+            <Faq items={page.faqs} />
+          </Container>
+        </section>
+      )}
     </>
   );
 }
